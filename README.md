@@ -1,2 +1,2 @@
-# sonnenblume
-Public repository for the sonnenblume project.
+# Sonnenblume
+Public repository for the Sonnenblume project.
