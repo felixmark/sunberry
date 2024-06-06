@@ -4,10 +4,18 @@
 
 {% block content %}
 <h1>Stats</h1>
-<pre>
-Total memory: {{ total_memory }}
-Used  memory: {{ used_memory }}
-Total swap:   {{ total_swap }}
-Used  swap:   {{ used_swap }}
-</pre>
+<table>
+    <tr><td>Total memory:</td><td>{{ total_memory }}</td></tr>
+    <tr><td>Used memory:</td><td>{{ used_memory }}</td></tr>
+    <tr><td>Used memory:</td><td>{{ used_memory_percent }}</td></tr>
+</table>
+<br>
+<table>
+    <tr><td>Total swap:</td><td>{{ total_swap }}</td></tr>
+    <tr><td>Used swap:</td><td>{{ used_swap }}</td></tr>
+</table>
+
+<script>
+    setInterval(() => { window.location = window.location.href; }, 2000);
+</script>
 {% endblock %}

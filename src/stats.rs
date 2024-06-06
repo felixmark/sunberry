@@ -11,6 +11,7 @@ use sysinfo::{
 struct Stats<'a> {
     total_memory: &'a str,
     used_memory: &'a str,
+    used_memory_percent: &'a str,
     total_swap: &'a str,
     used_swap: &'a str,
 }
@@ -59,6 +60,7 @@ pub async fn page_stats(_query: web::Query<HashMap<String, String>>) -> Result<i
     sys.refresh_all();
     let total_memory = bytes_to_string(sys.total_memory());
     let used_memory = bytes_to_string(sys.used_memory());
+    let used_memory_percent = (((sys.used_memory() as f64 / sys.total_memory() as f64) * 1000.0).round() / 10.0).to_string() + " %";
     let total_swap = bytes_to_string(sys.total_swap());
     let used_swap = bytes_to_string(sys.used_swap());
     /*
@@ -125,6 +127,7 @@ pub async fn page_stats(_query: web::Query<HashMap<String, String>>) -> Result<i
     let html = Stats {
         total_memory: &total_memory,
         used_memory: &used_memory,
+        used_memory_percent: &used_memory_percent,
         total_swap: &total_swap,
         used_swap: &used_swap,
     }.render().expect("Template should be valid");
