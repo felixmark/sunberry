@@ -8,28 +8,24 @@ html, body {
     padding: 0;
     font-family: monospace, monospace;
 }
-#title-wrapper {
-    text-align: center;
-    width: 100%;
-}
 #title {
-    display: inline-block;
-    text-align: left;
-    width: 100%;
-    max-width: 900px;
     font-size: large;
     padding: 10px 20px;
     font-weight: bold;
 }
 
-#content-wrapper {
+.wrapper {
+    width: 100%;
     text-align: center;
 }
-#content {
+.content {
     display: inline-block;
     text-align: left;
     width: 100%;
     max-width: 900px;
+}
+
+.padding-20-20 {
     padding: 20px 20px;
 }
 

@@ -10,6 +10,7 @@ askama = "0.12"
 actix-web = "4"
 actix-files = "0.6.5"
 actix-web-lab = "0.20.2"
+sysinfo = "0.30.12"
 
 [build-dependencies]
 askama = "0.12"
