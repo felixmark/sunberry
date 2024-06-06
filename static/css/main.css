@@ -10,11 +10,18 @@ html, body {
     font-family: monospace, monospace;
 }
 
-#title {
-    font-size: large;
-    width: 100%;
-    padding: 10px;
+#title-wrapper {
+    text-align: center;
     background: #dfa730;
+    width: 100%;
+}
+#title {
+    display: inline-block;
+    text-align: left;
+    width: 100%;
+    max-width: 800px;
+    font-size: large;
+    padding: 10px 20px;
     color: #252525;
     font-weight: bold;
 }
@@ -24,8 +31,8 @@ html, body {
 }
 #content {
     display: inline-block;
+    text-align: left;
     width: 100%;
     max-width: 800px;
     padding: 20px 20px;
-    text-align: left;
 }
