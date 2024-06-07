@@ -8,9 +8,11 @@ html, body {
     padding: 0;
     font-family: monospace, monospace;
 }
+#title, #menu {
+    padding: 10px 20px;
+}
 #title {
     font-size: large;
-    padding: 10px 20px;
     font-weight: bold;
 }
 
@@ -41,3 +43,4 @@ html, body {
 .bg-yellow { background: #d79921; }
 .bg-red { background: #cc241d; }
 .bg-black { background: #3c3836; }
+.bg-alpha-dark { background: #00000030; }

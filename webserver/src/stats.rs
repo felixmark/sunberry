@@ -17,7 +17,7 @@ struct Stats<'a> {
 }
 
 
-fn fill_number_string(mut number: u64, length: u64, fill_character: char, left: bool) -> String {
+fn fill_number_string(number: u64, length: u64, fill_character: char, left: bool) -> String {
     let mut ret_str = number.to_string();
     let number_len = number.to_string().len() as u64;
     if length > number_len {

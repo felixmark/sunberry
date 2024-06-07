@@ -3,6 +3,7 @@ use actix_web::{middleware, web, App, HttpServer};
 
 mod index;
 mod stats;
+mod links;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -15,7 +16,9 @@ async fn main() -> std::io::Result<()> {
             .wrap(middleware::Logger::default())
             .service(web::resource("/").route(web::get().to(index::page_index)))
             .service(web::resource("/stats").route(web::get().to(stats::page_stats)))
+            .service(web::resource("/links").route(web::get().to(links::page_links)))
             .service(fs::Files::new("/static", "static").show_files_listing())
+            .service(fs::Files::new("/", "static/favicon").show_files_listing())
     })
     .bind(("0.0.0.0", 8080))?
     .run()
