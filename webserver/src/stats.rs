@@ -14,6 +14,10 @@ struct Stats<'a> {
     used_memory_percent: &'a str,
     total_swap: &'a str,
     used_swap: &'a str,
+    system_name: &'a str,
+    kernel_version: &'a str,
+    os_version: &'a str,
+    host_name: &'a str,
 }
 
 
@@ -63,14 +67,13 @@ pub async fn page_stats(_query: web::Query<HashMap<String, String>>) -> Result<i
     let used_memory_percent = (((sys.used_memory() as f64 / sys.total_memory() as f64) * 1000.0).round() / 10.0).to_string() + " %";
     let total_swap = bytes_to_string(sys.total_swap());
     let used_swap = bytes_to_string(sys.used_swap());
+
+    let system_name = System::name().unwrap();
+    let kernel_version = System::kernel_version().unwrap();
+    let os_version = System::os_version().unwrap();
+    let host_name = System::host_name().unwrap();
+  
     /*
-    
-    // Display system information:
-    println!("System name:             {:?}", System::name());
-    println!("System kernel version:   {:?}", System::kernel_version());
-    println!("System OS version:       {:?}", System::os_version());
-    println!("System host name:        {:?}", System::host_name());
-    
     // Number of CPUs:
     println!("NB CPUs: {}", sys.cpus().len());
     
@@ -130,6 +133,11 @@ pub async fn page_stats(_query: web::Query<HashMap<String, String>>) -> Result<i
         used_memory_percent: &used_memory_percent,
         total_swap: &total_swap,
         used_swap: &used_swap,
+
+        system_name: &system_name,
+        kernel_version: &kernel_version,
+        os_version: &os_version,
+        host_name: &host_name,
     }.render().expect("Template should be valid");
     Ok(Html(html))
 }

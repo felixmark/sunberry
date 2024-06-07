@@ -1,0 +1,7 @@
+# ========================================================
+# Sunberry
+# Turn off act led
+dtparam=act_led_trigger=none
+# Disable Bluetooth
+dtoverlay=disable-bt
+# ========================================================
