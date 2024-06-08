@@ -11,12 +11,6 @@
         <li>#3: Keep constant CPU usage under 90%.</li>
         <li>#4: Document as much as possible.</li>
         <li>#5: Don't brick the system (please).</li>
-        <li>#6: Don't do illegal stuff of any kind.</li>
+        <li>#6: Don't do illegal stuff of any kind (of course).</li>
     </ul>
-</p>
-<p>
-    <h2>Links</h2>
-    Rust: <a href="https://doc.rust-lang.org/book/" target="_blank">https://doc.rust-lang.org/book/</a><br>
-    Actix: <a href="https://actix.rs/docs/" target="_blank">https://actix.rs/docs/</a><br>
-    Askama: <a href="https://djc.github.io/askama/" target="_blank">https://djc.github.io/askama/</a><br>
 </p>
