@@ -11,6 +11,8 @@ actix-web = "4"
 actix-files = "0.6.5"
 actix-web-lab = "0.20.2"
 sysinfo = "0.30.12"
+markdown = "1.0.0-alpha.17"
+tokio = { version= "1.38.0", features = ["fs"] }
 
 [build-dependencies]
 askama = "0.12"
