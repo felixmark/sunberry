@@ -7,8 +7,13 @@ sudo apt install rustc
 sudo apt install cargo
 ```
 
-## Run the Webserver
+## Webserver
+### Run the webserver
 ```sh
 cd webserver
 cargo run
+```
+### Build the webserver for production
+```sh
+cargo build --release
 ```
