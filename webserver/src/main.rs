@@ -15,10 +15,9 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .wrap(middleware::Logger::default())
-            .service(web::resource("/").route(web::get().to(pages::index::page_index)))
+            .service(web::resource("/").route(web::get().to(pages::mdpage::index)))
             .service(web::resource("/stats").route(web::get().to(pages::stats::page_stats)))
-            .service(web::resource("/links").route(web::get().to(pages::links::page_links)))
-            .service(web::resource("/notes").route(web::get().to(pages::notes::page_notes)))
+            .service(web::resource("/{any}").route(web::get().to(pages::mdpage::subpage)))
             .service(fs::Files::new("/static", "static").show_files_listing())
             .service(fs::Files::new("/", "static/favicon").show_files_listing())
     })

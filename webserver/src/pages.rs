@@ -1,4 +1,2 @@
-pub mod index;
-pub mod links;
-pub mod notes;
+pub mod mdpage;
 pub mod stats;

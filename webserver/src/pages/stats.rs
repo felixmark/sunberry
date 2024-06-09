@@ -3,7 +3,7 @@ use actix_web::{web, Responder, Result};
 use actix_web_lab::respond::Html;
 use askama::Template;
 use sysinfo::{
-    Components, Disks, Networks, System,
+    /*Components, Disks, Networks,*/ System,
 };
 
 #[derive(Template)]
