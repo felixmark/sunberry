@@ -9,14 +9,14 @@ struct INAMeasurement {
 }
 
 fn main() -> Result<()> {
-    let conn = Connection::open_in_memory()?;
+    let conn = Connection::open("/etc/sunberry/sunberry.db")?;
 
     conn.execute(
-        "CREATE TABLE pv_measurements (
+        "CREATE TABLE IF NOT EXISTS pv_measurements (
             id    INTEGER PRIMARY KEY,
             current  DOUBLE,
             voltage  DOUBLE,
-            power DOUBLE
+            power    DOUBLE
         )",
         (), // empty list of parameters.
     )?;
