@@ -1,0 +1,16 @@
+[package]
+name = "project"
+version = "0.1.0"
+edition = "2021"
+authors = ["felixmark"]
+
+[workspace]
+members = ["collector", "webserver"]
+
+[[bin]]
+name = "collector"
+path = "collector/src/main.rs"
+
+[[bin]]
+name = "webserver"
+path = "webserver/src/main.rs"
