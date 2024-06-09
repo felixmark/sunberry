@@ -1,7 +1,9 @@
 use actix_web::{web, Responder, Result};
+use actix_web::error::ErrorNotFound;
 use actix_web_lab::respond::Html;
 use askama::Template;
 use tokio;
+use std::path::PathBuf;
 
 #[derive(Template)]
 #[template(path = "mdpage.html")]
@@ -20,16 +22,17 @@ pub async fn subpage(path: web::Path<String>) -> Result<impl Responder> {
 
 async fn deliver_md_file(md_file: String) -> Result<impl Responder> {
     let lowercase_md_file = md_file.to_lowercase();
-    let mut filepath = "md/".to_owned();
-    filepath.push_str(&lowercase_md_file);
-    filepath.push_str(".md".to_owned().as_str());
-    if tokio::fs::metadata(&filepath).await.is_ok() {
-        let md_content = tokio::fs::read_to_string(filepath).await?;
+    let mut md_file_path = PathBuf::new();
+    md_file_path.push("md");
+    md_file_path.push(lowercase_md_file);
+    md_file_path.set_extension("md");
+    if tokio::fs::metadata(&md_file_path).await.is_ok() {
+        let md_content = tokio::fs::read_to_string(md_file_path).await?;
         let html = MarkdownPage{
-            title: &md_file,
+            title: &md_file.replace("_", " "),
             md_content: &md_content
         }.render().expect("Template should be valid");
         return Ok(Html(html));
     }
-    return Ok(Html("Page not found, even though status code is 200...".to_string()))
+    Err(ErrorNotFound("Requested page does not exist."))
 }

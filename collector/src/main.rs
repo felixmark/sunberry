@@ -1,4 +1,5 @@
 use rusqlite::{Connection, Result};
+use std::path::PathBuf;
 
 #[derive(Debug)]
 struct INAMeasurement {
@@ -9,7 +10,12 @@ struct INAMeasurement {
 }
 
 fn main() -> Result<()> {
-    let conn = Connection::open("/etc/sunberry/sunberry.db")?;
+    let mut db_filepath = PathBuf::new();
+    db_filepath.push("/etc");
+    db_filepath.push("sunberry");
+    db_filepath.push("database");
+    db_filepath.set_extension("db");
+    let conn = Connection::open(db_filepath)?;
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS pv_measurements (
