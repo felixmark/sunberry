@@ -5,7 +5,7 @@ edition = "2021"
 authors = ["felixmark"]
 
 [workspace]
-members = ["collector", "webserver"]
+members = ["collector", "webserver", "general"]
 
 [[bin]]
 name = "collector"
@@ -14,3 +14,7 @@ path = "collector/src/main.rs"
 [[bin]]
 name = "webserver"
 path = "webserver/src/main.rs"
+
+[lib]
+name = "general"
+path = "general/src/lib.rs"

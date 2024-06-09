@@ -2,7 +2,7 @@ use actix_files as fs;
 use actix_web::{middleware, web, App, HttpServer};
 
 mod pages;
-use separator;
+use general;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -11,7 +11,7 @@ async fn main() -> std::io::Result<()> {
     let address = "0.0.0.0";
     let port = 8080;
 
-    log::info!("{}", separator());
+    log::info!("{}", general::separator());
     log::info!("Starting Webserver at {}:{}", address, port);
 
     HttpServer::new(move || {
