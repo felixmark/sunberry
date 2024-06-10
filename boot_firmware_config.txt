@@ -4,4 +4,6 @@
 dtparam=act_led_trigger=none
 # Disable Bluetooth
 dtoverlay=disable-bt
+# Make HDMI port disabable
+# Comment out: dtoverlay=vc4-kms-v3d
 # ========================================================
