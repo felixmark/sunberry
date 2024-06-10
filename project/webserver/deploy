@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Add the rustup target, if it does not exist yet
+rustup target add aarch64-unknown-linux-gnu
+sudo apt install g++-12-aarch64-linux-gnu
+
+set -o errexit
+set -o nounset
+set -o pipefail
+set -o xtrace
+
+readonly TARGET_HOST=sunshine@sunberry
+readonly TARGET_EXECUTION_PATH=/etc/sunberry/project/webserver
+readonly TARGET_PATH=/etc/sunberry/project/webserver/webserver
+readonly TARGET_ARCH=aarch64-unknown-linux-gnu
+readonly SOURCE_PATH=../target/${TARGET_ARCH}/release/webserver
+
+cargo build --release --target=${TARGET_ARCH}
+rsync ${SOURCE_PATH} ${TARGET_HOST}:${TARGET_PATH}
+
+# For execution after uploading:
+# ssh ${TARGET_HOST} -t "cd ${TARGET_EXECUTION_PATH}; ${TARGET_PATH}"
