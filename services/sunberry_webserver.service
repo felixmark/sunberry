@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 Restart=on-failure
 RestartSec=5
-User=sunshine
+User=root
 WorkingDirectory=/etc/sunberry/projects/webserver
 ExecStart=/etc/sunberry/projects/webserver/webserver
 
