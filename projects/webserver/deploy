@@ -10,10 +10,10 @@ set -o pipefail
 set -o xtrace
 
 readonly TARGET_HOST=sunshine@sunberry
-readonly TARGET_EXECUTION_PATH=/etc/sunberry/project/collector
-readonly TARGET_PATH=/etc/sunberry/project/collector/collector
+readonly TARGET_EXECUTION_PATH=/etc/sunberry/projects/webserver
+readonly TARGET_PATH=/etc/sunberry/projects/webserver/webserver
 readonly TARGET_ARCH=aarch64-unknown-linux-gnu
-readonly SOURCE_PATH=../target/${TARGET_ARCH}/release/collector
+readonly SOURCE_PATH=../target/${TARGET_ARCH}/release/webserver
 
 cargo build --release --target=${TARGET_ARCH}
 rsync ${SOURCE_PATH} ${TARGET_HOST}:${TARGET_PATH}

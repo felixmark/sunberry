@@ -1,0 +1,14 @@
+[Unit]
+Description=Sunberry Webserver
+After=network.target
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5
+User=sunshine
+WorkingDirectory=/etc/sunberry/projects/webserver
+ExecStart=/etc/sunberry/projects/webserver/webserver
+
+[Install]
+WantedBy=multi-user.target

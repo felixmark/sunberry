@@ -33,12 +33,12 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ### Testing
 Cargo is the tool used for compiling the code into an executable.
 ```sh
-cd project/<project_name>
+cd projects/<project_name>
 cargo run
 ```
 You can install cargo watch to watch changes as you program, which can be very helpful (when working on the webserver for instance).
 ```sh
-cd project/<project_name>
+cd projects/<project_name>
 cargo install cargo-watch
 cargo watch -x run
 ```
@@ -54,6 +54,6 @@ Host sunberry
 
 Deploying to the sunberry is rather straight forward:
 ```bash
-cd project/<project_name>
+cd projects/<project_name>
 ./deploy
 ```

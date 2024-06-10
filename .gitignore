@@ -14,4 +14,4 @@ Cargo.lock
 *.pdb
 
 secrets/
-project/webserver/webserver
+projects/webserver/webserver
