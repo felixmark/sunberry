@@ -9,7 +9,7 @@ async fn main() -> std::io::Result<()> {
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
     let address = "0.0.0.0";
-    let port = 80;
+    let port = 8080;
 
     log::info!("{}", general::separator());
     log::info!("Starting Webserver at {}:{}", address, port);

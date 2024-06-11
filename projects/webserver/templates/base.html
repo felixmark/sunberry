@@ -15,13 +15,13 @@
   <script>hljs.highlightAll();</script>
 </head>
 <body>
-  <div class="bg-yellow wrapper">
+  <div id="title-wrapper" class="bg-yellow wrapper fixed">
     <div id="title" class="white content">
       <img src="/static/img/physalis.png" height="30" style="position: absolute; top: 5px;">
       <div style="margin-left: 45px;">{% block title %}Base{% endblock %}</div>
     </div>
   </div>
-  <div class="bg-alpha-dark wrapper">
+  <div id="menu-wrapper" class="bg-blacker wrapper fixed">
     <div id="menu" class="white content">
       <a href="/">Home</a>
       <a href="/stats">Stats</a>
@@ -30,7 +30,7 @@
       <a href="/best_practices">Best practices</a>
     </div>
   </div>
-  <div class="wrapper">
+  <div id="content-wrapper" class="wrapper">
     <div class="content padding-20-20">
       {% block content %}<p>Child node is mounted here.</p>{% endblock %}
     </div>

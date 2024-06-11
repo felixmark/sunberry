@@ -4,20 +4,51 @@
 
 {% block content %}
 <h1>Stats</h1>
+
+<h2>System</h2>
+<table>
+    <tr><td>Host name:</td><td>{{ host_name }}</td></tr>
+    <tr><td>System name:</td><td>{{ system_name }}</td></tr>
+    <tr><td>Kernel:</td><td>{{ kernel_version }}</td></tr>
+    <tr><td>OS version:</td><td>{{ os_version }}</td></tr>
+    <tr><td>CPU cores:</td><td>{{ number_cpus }}</td></tr>
+</table>
+
+<h2>Memory</h2>
 <table>
     <tr><td>Total memory:</td><td>{{ total_memory }}</td></tr>
     <tr><td>Used memory:</td><td>{{ used_memory }}</td></tr>
     <tr><td>Used memory:</td><td>{{ used_memory_percent }}</td></tr>
     <tr><td>Total swap:</td><td>{{ total_swap }}</td></tr>
     <tr><td>Used swap:</td><td>{{ used_swap }}</td></tr>
-    <tr><td>&nbsp;</td></tr>
-    <tr><td>System name:</td><td>{{ system_name }}</td></tr>
-    <tr><td>OS version:</td><td>{{ os_version }}</td></tr>
-    <tr><td>Kernel:</td><td>{{ kernel_version }}</td></tr>
-    <tr><td>Host name:</td><td>{{ host_name }}</td></tr>
 </table>
 
-<script>
-    setInterval(() => { window.location = window.location.href; }, 5000);
-</script>
+<h2>Disks ({{ disks.len() }})</h2>
+<table>
+    {% for disk in disks %}
+    <tr><td>{{ disk|e }}</td></tr>
+    {% endfor %}
+</table>
+
+<h2>Networks ({{ networks.len() }})</h2>
+<table>
+    {% for network in networks %}
+    <tr><td>{{ network|e }}</td></tr>
+    {% endfor %}
+</table>
+
+<h2>Components ({{ components.len() }})</h2>
+<table>
+    {% for component in components %}
+    <tr><td>{{ component|e }}</td></tr>
+    {% endfor %}
+</table>
+
+<h2>Processes ({{ processes.len() }})</h2>
+<table>
+    <tr><th>PID</th><th>Name</th><th>Memory</th><th>CPU usage</th></tr>
+    {% for process in processes %}
+    <tr><td>{{ process.pid|e }}</td><td>{{ process.name|e }}</td><td>{{ process.memory|e }}</td><td>{{ process.cpu_usage|e }} %</td></tr>
+    {% endfor %}
+</table>
 {% endblock %}

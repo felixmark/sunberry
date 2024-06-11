@@ -7,6 +7,18 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: monospace, monospace;
+    font-size: 14px;
+}
+th, td {
+    padding: 2px 0;
+    padding-right: 8px;
+}
+
+#title-wrapper {
+    top: 0;
+}
+#menu-wrapper {
+    top: 41px;
 }
 #title, #menu {
     padding: 10px 20px;
@@ -15,7 +27,9 @@ html, body {
     font-size: large;
     font-weight: bold;
 }
-
+.fixed {
+    position: fixed;
+}
 .wrapper {
     width: 100%;
     text-align: center;
@@ -25,6 +39,9 @@ html, body {
     text-align: left;
     width: 100%;
     max-width: 900px;
+}
+#content-wrapper {
+    margin-top: 70px;
 }
 
 .padding-20-20 {
@@ -43,4 +60,4 @@ html, body {
 .bg-yellow { background: #d79921; }
 .bg-red { background: #cc241d; }
 .bg-black { background: #3c3836; }
-.bg-alpha-dark { background: #00000030; }
+.bg-blacker { background: #282625; }

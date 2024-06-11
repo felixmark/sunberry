@@ -1,10 +1,17 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, os::unix::process};
 use actix_web::{web, Responder, Result};
 use actix_web_lab::respond::Html;
 use askama::Template;
 use sysinfo::{
-    /*Components, Disks, Networks,*/ System,
+    Components, Disk, Disks, Networks, Process, System
 };
+
+struct ProcessInformation<'a> {
+    pid: u32,
+    name: &'a str,
+    memory: String,
+    cpu_usage: f32
+}
 
 #[derive(Template)]
 #[template(path = "stats.html")]
@@ -18,6 +25,12 @@ struct Stats<'a> {
     kernel_version: &'a str,
     os_version: &'a str,
     host_name: &'a str,
+
+    number_cpus: &'a usize,
+    processes: &'a Vec<ProcessInformation<'a>>,
+    disks: &'a Vec<String>,
+    networks: &'a Vec<String>,
+    components: &'a Vec<String>
 }
 
 
@@ -73,59 +86,35 @@ pub async fn page_stats(_query: web::Query<HashMap<String, String>>) -> Result<i
     let os_version = System::os_version().unwrap();
     let host_name = System::host_name().unwrap();
   
-    /*
-    // Number of CPUs:
-    println!("NB CPUs: {}", sys.cpus().len());
-    
-    // Display processes ID, name na disk usage:
+    let number_cpus = sys.cpus().len();
+    let mut processes = vec![];
     for (pid, process) in sys.processes() {
-        println!("[{pid}] {} {:?}", process.name(), process.disk_usage());
+        let process_information = ProcessInformation {
+            pid: pid.as_u32(),
+            name: process.name(),
+            memory: bytes_to_string(process.memory()),
+            cpu_usage: process.cpu_usage()
+        };
+        processes.push(process_information);
     }
-    
-    // We display all disks' information:
-    println!("=> disks:");
-    let disks = Disks::new_with_refreshed_list();
-    for disk in &disks {
-        println!("{disk:?}");
-    }
-    
-    // Network interfaces name, total data received and total data transmitted:
-    let networks = Networks::new_with_refreshed_list();
-    println!("=> networks:");
-    for (interface_name, data) in &networks {
-        println!(
-            "{interface_name}: {} B (down) / {} B (up)",
-            data.total_received(),
-            data.total_transmitted(),
-        );
-        // If you want the amount of data received/transmitted since last call
-        // to `Networks::refresh`, use `received`/`transmitted`.
-    }
-    
-    // Components temperature:
-    let components = Components::new_with_refreshed_list();
-    println!("=> components:");
-    for component in &components {
-        println!("{component:?}");
-    }
-    
-    Please remember that to have some up-to-date information, you need to call the equivalent refresh method. For example, for the CPU usage:
-    
-    use sysinfo::System;
-    
-    let mut sys = System::new();
-    
-    loop {
-        sys.refresh_cpu(); // Refreshing CPU information.
-        for cpu in sys.cpus() {
-            print!("{}% ", cpu.cpu_usage());
-        }
-        // Sleeping to let time for the system to run for long
-        // enough to have useful information.
-        std::thread::sleep(sysinfo::MINIMUM_CPU_UPDATE_INTERVAL);
-    }
-    */
 
+    let disks = Disks::new_with_refreshed_list();
+    let mut disk_strings = vec![];
+    for disk in disks.list() {
+        disk_strings.push(format!("{:?}", disk));
+    }
+
+    let networks = Networks::new_with_refreshed_list();
+    let mut network_strings = vec![];
+    for network in &networks {
+        network_strings.push(format!("{:?}", network));
+    }
+
+    let components = Components::new_with_refreshed_list();
+    let mut component_strings = vec![];
+    for component in &components {
+        component_strings.push(format!("{:?}", component));
+    }
     
     let html = Stats {
         total_memory: &total_memory,
@@ -138,6 +127,12 @@ pub async fn page_stats(_query: web::Query<HashMap<String, String>>) -> Result<i
         kernel_version: &kernel_version,
         os_version: &os_version,
         host_name: &host_name,
+
+        number_cpus: &number_cpus,
+        processes: &processes,
+        disks: &disk_strings,
+        networks: &network_strings,
+        components: &component_strings
     }.render().expect("Template should be valid");
     Ok(Html(html))
 }
