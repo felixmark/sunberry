@@ -1,9 +1,9 @@
-use std::{collections::HashMap, os::unix::process};
+use std::collections::HashMap;
 use actix_web::{web, Responder, Result};
 use actix_web_lab::respond::Html;
 use askama::Template;
 use sysinfo::{
-    Components, Disk, Disks, Networks, Process, System
+    Components, Disks, Networks, System
 };
 
 struct ProcessInformation<'a> {

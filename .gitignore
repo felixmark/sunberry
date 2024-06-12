@@ -17,3 +17,4 @@ Cargo.lock
 secrets/
 projects/webserver/webserver
 *.db
+.env
