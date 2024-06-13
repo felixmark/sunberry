@@ -28,6 +28,7 @@ async fn main() -> std::io::Result<()> {
             .service(fs::Files::new("/", "static/favicon").show_files_listing())
     })
     .workers(4)
+    .worker_max_blocking_threads(10)
     .bind((address, port))?
     .run()
     .await
