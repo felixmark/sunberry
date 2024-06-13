@@ -88,7 +88,9 @@ pub async fn page_systeminfo(_query: web::Query<HashMap<String, String>>) -> Res
     let number_cpus = sys.cpus().len();
     let mut processes = vec![];
     for (_pid, process) in sys.processes() {
-        if process.name().starts_with("kworker") {
+        let mut should_continue = process.name().starts_with("kworker");
+        should_continue |= process.memory() <= 0;
+        if should_continue {
             continue;
         }
         let process_information = ProcessInformation {
