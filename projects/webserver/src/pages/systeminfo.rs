@@ -3,7 +3,7 @@ use actix_web::{web, Responder, Result};
 use actix_web_lab::respond::Html;
 use askama::Template;
 use sysinfo::{
-    Components, Disks, Networks, System
+    Components, Disks, Networks, Pid, Process, System
 };
 
 struct ProcessInformation<'a> {
@@ -87,7 +87,9 @@ pub async fn page_systeminfo(_query: web::Query<HashMap<String, String>>) -> Res
   
     let number_cpus = sys.cpus().len();
     let mut processes = vec![];
-    for (_pid, process) in sys.processes() {
+    let mut sys_processes: Vec<(&Pid, &Process)> = sys.processes().iter().collect();
+    sys_processes.sort_by(|a, b| b.1.memory().cmp(&a.1.memory()));
+    for (_pid, process) in sys_processes {
         let mut should_continue = process.name().starts_with("kworker");
         should_continue |= process.memory() <= 0;
         if should_continue {
