@@ -2,4 +2,13 @@
 
 {% block title %}{{ title|capitalize }}{% endblock %}
 
-{% block content %}{{ md_content|markdown|safe }}{% endblock %}
+{% block content %}
+{{ md_content|markdown|safe }}
+<style>
+hr {
+    display: block;
+    height: 100px;
+    border: none;
+}
+</style>
+{% endblock %}

@@ -49,8 +49,11 @@ a {
 }
 #content-wrapper {
     overflow-y: auto;
-    max-height: 95vh;
-    max-height: calc(100vh - 80px);
+    max-height: 90vh;
+    max-height: calc(100vh - 84px);
+}
+#main-content {
+    padding-bottom: 80px;
 }
 
 .padding-20-20 {

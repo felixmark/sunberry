@@ -1,35 +1,40 @@
-use actix_files as fs;
-use actix_web::{middleware, web, App, HttpServer};
-use dotenvy::dotenv;
-use std::env;
+use axum::{
+    http::StatusCode,
+    routing::get,
+    Router,
+};
+use tower_http::{
+    services::ServeDir, 
+    services::ServeFile
+};
 
 mod pages;
 use general;
 
-#[actix_web::main]
-async fn main() -> std::io::Result<()> {
-    // Load environment variables from .env file
-    dotenv().expect(".env file not found");
-    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+async fn fallback() -> (StatusCode, &'static str) {
+    (StatusCode::NOT_FOUND, "Bober kurwa! (Error 404)")
+}
 
-    let address = "0.0.0.0";
-    let port = env::var("SUNBERRY_WEBSERVER_PORT").expect("SUNBERRY_WEBSERVER_PORT not set in environment.").parse::<u16>().unwrap();
+#[tracing::instrument(ret)]
+#[tokio::main]
+async fn main() {
+    tracing_subscriber::fmt().init();
+    tracing::info!("{}", general::separator());
+    tracing::info!("Starting Webserver.");
 
-    log::info!("{}", general::separator());
-    log::info!("Starting Webserver at {}:{}", address, port);
+    let serve_dir = ServeDir::new("static").not_found_service(ServeFile::new("static"));
 
-    HttpServer::new(move || {
-        App::new()
-            .wrap(middleware::Logger::default())
-            .service(web::resource("/").route(web::get().to(pages::home::home)))
-            .service(web::resource("/systeminfo").route(web::get().to(pages::systeminfo::page_systeminfo)))
-            .service(web::resource("/{any}").route(web::get().to(pages::mdpage::subpage)))
-            .service(fs::Files::new("/static", "static").show_files_listing())
-            .service(fs::Files::new("/", "static/favicon").show_files_listing())
-    })
-    .workers(4)
-    .worker_max_blocking_threads(10)
-    .bind((address, port))?
-    .run()
-    .await
+    let app = Router::new()
+        .route("/", get(pages::home::page_home))
+        .route("/systeminfo", get(pages::systeminfo::page_systeminfo))
+        .route("/book", get(pages::mdpage::page_book))
+        .nest_service("/static", serve_dir.clone())
+        .fallback(fallback);
+
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:80")
+        .await
+        .unwrap();
+
+    tracing::info!("Listening on {}", listener.local_addr().unwrap());
+    axum::serve(listener, app).await.unwrap();
 }

@@ -1,35 +1,32 @@
-use std::collections::HashMap;
-use actix_web::{web, Responder, Result};
-use actix_web_lab::respond::Html;
-use askama::Template;
+use askama_axum::Template;
 use sysinfo::{
     Components, Disks, Networks, Pid, Process, System
 };
 
-struct ProcessInformation<'a> {
-    name: &'a str,
+struct ProcessInformation {
+    name: String,
     memory: String,
     cpu_usage: String
 }
 
 #[derive(Template)]
 #[template(path = "systeminfo.html")]
-struct SystemInfo<'a> {
-    total_memory: &'a str,
-    used_memory: &'a str,
-    used_memory_percent: &'a str,
-    total_swap: &'a str,
-    used_swap: &'a str,
-    system_name: &'a str,
-    kernel_version: &'a str,
-    os_version: &'a str,
-    host_name: &'a str,
+pub struct SystemInfo {
+    total_memory: String,
+    used_memory: String,
+    used_memory_percent: String,
+    total_swap: String,
+    used_swap: String,
+    system_name: String,
+    kernel_version: String,
+    os_version: String,
+    host_name: String,
 
-    number_cpus: &'a usize,
-    processes: &'a Vec<ProcessInformation<'a>>,
-    disks: &'a Vec<String>,
-    networks: &'a Vec<String>,
-    components: &'a Vec<String>
+    number_cpus: usize,
+    processes: Vec<ProcessInformation>,
+    disks: Vec<String>,
+    networks: Vec<String>,
+    components: Vec<String>
 }
 
 
@@ -71,7 +68,7 @@ fn bytes_to_string(mut bytes: u64) -> String {
         fill_number_string(rest, 3, '0', false).to_string().as_str() + " " + unit + "B"
 }
 
-pub async fn page_systeminfo(_query: web::Query<HashMap<String, String>>) -> Result<impl Responder> {
+pub async fn page_systeminfo() -> SystemInfo {
     let mut sys = System::new_all();
     sys.refresh_all();
     let total_memory = bytes_to_string(sys.total_memory());
@@ -96,7 +93,7 @@ pub async fn page_systeminfo(_query: web::Query<HashMap<String, String>>) -> Res
             continue;
         }
         let process_information = ProcessInformation {
-            name: process.name(),
+            name: process.name().to_string(),
             memory: bytes_to_string(process.memory()),
             cpu_usage: format!("{:.5}", process.cpu_usage())
         };
@@ -121,23 +118,22 @@ pub async fn page_systeminfo(_query: web::Query<HashMap<String, String>>) -> Res
         component_strings.push(format!("{:?}", component));
     }
     
-    let html = SystemInfo {
-        total_memory: &total_memory,
-        used_memory: &used_memory,
-        used_memory_percent: &used_memory_percent,
-        total_swap: &total_swap,
-        used_swap: &used_swap,
+    SystemInfo {
+        total_memory: total_memory,
+        used_memory: used_memory,
+        used_memory_percent: used_memory_percent,
+        total_swap: total_swap,
+        used_swap: used_swap,
 
-        system_name: &system_name,
-        kernel_version: &kernel_version,
-        os_version: &os_version,
-        host_name: &host_name,
+        system_name: system_name,
+        kernel_version: kernel_version,
+        os_version: os_version,
+        host_name: host_name,
 
-        number_cpus: &number_cpus,
-        processes: &processes,
-        disks: &disk_strings,
-        networks: &network_strings,
-        components: &component_strings
-    }.render().expect("Template should be valid");
-    Ok(Html(html))
+        number_cpus: number_cpus,
+        processes: processes,
+        disks: disk_strings,
+        networks: network_strings,
+        components: component_strings
+    }
 }

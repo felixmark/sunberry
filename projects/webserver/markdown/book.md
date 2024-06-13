@@ -8,6 +8,7 @@ Notes, best practices and links.
   - [Load a file async (non-blocking)](#load-a-file-async-non-blocking)
 - [Links](#links)
   
+---------------------------------------------------------
   
 # Notes
 **ToDo**
@@ -16,6 +17,7 @@ Notes, best practices and links.
 - Store read data in SQLite database
 - Fetch stored data from database in webinterface and render it as graphs
 
+---------------------------------------------------------
 
 # Best practices
 A collection of Rust best practices.
@@ -32,6 +34,8 @@ let Ok(content) = tokio::fs::read_to_string(file_path).await else {
 };
 // Do something with with content here
 ```
+
+---------------------------------------------------------
 
 # Links
 
