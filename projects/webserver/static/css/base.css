@@ -8,7 +8,10 @@ html, body {
     padding: 0;
     font-family: system-ui;
     font-size: 15px;
-    overflow-y: overlay;
+}
+body {
+    overflow-y: auto;
+    scrollbar-gutter: stable;
 }
 th, td {
     padding: 2px 0;
