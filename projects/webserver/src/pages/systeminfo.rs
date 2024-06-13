@@ -7,15 +7,14 @@ use sysinfo::{
 };
 
 struct ProcessInformation<'a> {
-    pid: u32,
     name: &'a str,
     memory: String,
-    cpu_usage: f32
+    cpu_usage: String
 }
 
 #[derive(Template)]
-#[template(path = "stats.html")]
-struct Stats<'a> {
+#[template(path = "systeminfo.html")]
+struct SystemInfo<'a> {
     total_memory: &'a str,
     used_memory: &'a str,
     used_memory_percent: &'a str,
@@ -72,7 +71,7 @@ fn bytes_to_string(mut bytes: u64) -> String {
         fill_number_string(rest, 3, '0', false).to_string().as_str() + " " + unit + "B"
 }
 
-pub async fn page_stats(_query: web::Query<HashMap<String, String>>) -> Result<impl Responder> {
+pub async fn page_systeminfo(_query: web::Query<HashMap<String, String>>) -> Result<impl Responder> {
     let mut sys = System::new_all();
     sys.refresh_all();
     let total_memory = bytes_to_string(sys.total_memory());
@@ -88,12 +87,14 @@ pub async fn page_stats(_query: web::Query<HashMap<String, String>>) -> Result<i
   
     let number_cpus = sys.cpus().len();
     let mut processes = vec![];
-    for (pid, process) in sys.processes() {
+    for (_pid, process) in sys.processes() {
+        if process.name().starts_with("kworker") {
+            continue;
+        }
         let process_information = ProcessInformation {
-            pid: pid.as_u32(),
             name: process.name(),
             memory: bytes_to_string(process.memory()),
-            cpu_usage: process.cpu_usage()
+            cpu_usage: format!("{:.5}", process.cpu_usage())
         };
         processes.push(process_information);
     }
@@ -116,7 +117,7 @@ pub async fn page_stats(_query: web::Query<HashMap<String, String>>) -> Result<i
         component_strings.push(format!("{:?}", component));
     }
     
-    let html = Stats {
+    let html = SystemInfo {
         total_memory: &total_memory,
         used_memory: &used_memory,
         used_memory_percent: &used_memory_percent,

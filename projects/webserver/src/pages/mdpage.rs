@@ -12,10 +12,6 @@ struct MarkdownPage<'a> {
     md_content: &'a str,
 }
 
-pub async fn index() -> Result<impl Responder> {
-    deliver_md_file("home".to_string()).await
-}
-
 pub async fn subpage(path: web::Path<String>) -> Result<impl Responder> {
     deliver_md_file(path.to_string()).await
 }

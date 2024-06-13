@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Stats{% endblock %}
+{% block title %}System Info{% endblock %}
 
 {% block content %}
-<h1>Stats</h1>
+<h1>System info</h1>
 
-<h2>System</h2>
+<h2>General</h2>
 <table>
     <tr><td>Host name:</td><td>{{ host_name }}</td></tr>
     <tr><td>System name:</td><td>{{ system_name }}</td></tr>
@@ -46,9 +46,9 @@
 
 <h2>Processes ({{ processes.len() }})</h2>
 <table>
-    <tr><th>PID</th><th>Name</th><th>Memory</th><th>CPU usage</th></tr>
+    <tr><th>Name</th><th>Memory</th><th>CPU usage</th></tr>
     {% for process in processes %}
-    <tr><td>{{ process.pid|e }}</td><td>{{ process.name|e }}</td><td>{{ process.memory|e }}</td><td>{{ process.cpu_usage|e }} %</td></tr>
+    <tr><td>{{ process.name|e }}</td><td>{{ process.memory|e }}</td><td>{{ process.cpu_usage|e }} %</td></tr>
     {% endfor %}
 </table>
 {% endblock %}

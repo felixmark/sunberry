@@ -1,5 +1,5 @@
 # Book
-A little book containing notes, best practices and links.
+Notes, best practices and links.
 
 **Index**  
 - [Book](#book)
@@ -10,9 +10,11 @@ A little book containing notes, best practices and links.
   
   
 # Notes
-FM ToDo List (feel free to take something off if you feel like)
-- Read and display Photovoltaic Voltage, Current, Power
-- Read and display Raspberry Pi Voltage, Current, Power
+**ToDo**
+- Read Photovoltaic Voltage, Current, Power
+- Read Raspberry Pi Voltage, Current, Power
+- Store read data in SQLite database
+- Fetch stored data from database in webinterface and render it as graphs
 
 
 # Best practices

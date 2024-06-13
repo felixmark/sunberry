@@ -1,2 +1,3 @@
+pub mod home;
 pub mod mdpage;
-pub mod stats;
+pub mod systeminfo;
