@@ -80,7 +80,7 @@ pub async fn page_systeminfo() -> SystemInfo {
         .map(|network| format!("{network:?}"))
         .collect();
     
-    let components: Vec<String> = Networks::new_with_refreshed_list()
+    let components: Vec<String> = Components::new_with_refreshed_list()
         .iter()
         .map(|component| format!("{component:?}"))
         .collect();
