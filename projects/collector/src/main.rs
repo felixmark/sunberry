@@ -13,9 +13,9 @@ use std::{thread, time};
 use log::{SetLoggerError, LevelFilter, debug, info, warn, error};
 use rand::Rng;
 
-use general::{predef::separator, ezlogger::EZLogger, ezlogger::INITIALIZE_ERROR};
+use general::{predef::separator, ezlogger::EZLogger, ezlogger::ERROR_INITIALIZE};
 
-static LOGGER: EZLogger = EZLogger;
+static LOGGER: EZLogger = EZLogger {name: "collector"};
 static LOOP_INTERVAL_SECONDS: time::Duration = time::Duration::from_secs(5);
 
 #[derive(Debug)]
@@ -83,7 +83,7 @@ fn collect(conn: &Connection) -> () {
 
 fn main() -> Result<()> {
     log::set_logger(&LOGGER)
-        .map(|()| log::set_max_level(LevelFilter::Debug)).expect(INITIALIZE_ERROR);
+        .map(|()| log::set_max_level(LevelFilter::Debug)).expect(ERROR_INITIALIZE);
     info!("{}", general::predef::separator());
     info!("Collector started");
 
