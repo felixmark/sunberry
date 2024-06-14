@@ -19,31 +19,31 @@
 <script>
   const ctx = document.getElementById('myChart');
 
-  new Chart(ctx, {
+  let chart = new Chart(ctx, {
     type: 'line',
     data: {
       labels: [1, 2, 3, 4, 5, 6],
       datasets: [{
-        label: 'Consumed power (W)',
-        data: [1, 2, 1, 2, 1, 2],
+        label: 'Power used (W)',
+        data: null,
         borderWidth: 3,
         borderColor: "#559598",
-        backgroundColor: "#559598"
+        backgroundColor: "#55959840",
+        fill: true,
       }, {
         label: 'Photovoltaic power (W)',
         data: [0, 3, 20, 14, 5, 0],
         borderWidth: 3,
         borderColor: "#d79921",
-        backgroundColor: "#d79921"
-      }, {
-        label: 'Self-sustainability (W)',
-        data: [-1, 1, 19, 12, 4, -2],
-        borderWidth: 3,
-        borderColor: "#f0f0f0",
-        backgroundColor: "#f0f0f0"
-      }]
+        backgroundColor: "#d7992120",
+        fill: true,
+      }],
     },
     options: {
+      interaction: {
+        intersect: false,
+        mode: 'index',
+      },
       scales: {
         y: {
           max: 22,
@@ -57,11 +57,28 @@
       plugins: {
         legend: {
           labels: {
-            usePointStyle: true
+            usePointStyle: true,
+            boxHeight: 7,
           }
+        },
+        tooltip: {
+          usePointStyle: true,
+          multiKeyBackground: "#00000000"
         }
       }
     }
+  });
+
+  const dbDataRequest = new Request("api/v1/db_data?from=13.06.2024&to=13.06.2024");
+  fetch(dbDataRequest).then((response) => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json()
+  }).then((dbDataObject) => {
+    power_used = dbDataObject["power_used"];
+    chart.data.datasets[0].data = power_used;
+    chart.update();
   });
 </script>
 {% endblock %}
