@@ -88,7 +88,7 @@ pub async fn page_systeminfo() -> SystemInfo {
     sys_processes.sort_by(|a, b| b.1.memory().cmp(&a.1.memory()));
     for (_pid, process) in sys_processes {
         let mut should_continue = process.name().starts_with("kworker");
-        should_continue |= process.memory() <= 0;
+        should_continue |= process.memory() == 0;
         if should_continue {
             continue;
         }

@@ -1,12 +1,2 @@
-[package]
-name = "projects"
-version = "0.1.0"
-edition = "2021"
-authors = ["felixmark"]
-
 [workspace]
 members = ["collector", "webserver", "general"]
-
-[lib]
-name = "general"
-path = "general/src/lib.rs"
