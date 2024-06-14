@@ -1,4 +1,5 @@
 use askama_axum::Template;
+use axum::http::StatusCode;
 use std::path::PathBuf;
 
 #[derive(Template)]
@@ -8,11 +9,11 @@ pub struct MarkdownPage {
     md_content: String,
 }
 
-pub async fn page_book() -> MarkdownPage {
+pub async fn page_book() -> Result<MarkdownPage, StatusCode> {
     deliver_md_file("book").await
 }
 
-async fn deliver_md_file(md_file: &str) -> MarkdownPage {
+async fn deliver_md_file(md_file: &str) -> Result<MarkdownPage, StatusCode> {
     // Build markdown filepath
     let lowercase_md_file = md_file.to_lowercase();
     let mut md_file_path = PathBuf::new();
@@ -21,12 +22,12 @@ async fn deliver_md_file(md_file: &str) -> MarkdownPage {
     md_file_path.set_extension("md");
 
     let Ok(md_content) = tokio::fs::read_to_string(&md_file_path).await else {
-        panic!("Oh oh! {:?}", &md_file_path);
+        return Err(StatusCode::NOT_FOUND);
     };
 
     // Markdown file exists. Deliver it.
-    MarkdownPage {
-        title: md_file.replace("_", " "),
-        md_content: md_content
-    }
+    Ok(MarkdownPage {
+        title: md_file.replace('_', " "),
+        md_content
+    })
 }

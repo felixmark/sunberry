@@ -29,43 +29,13 @@ pub struct SystemInfo {
     components: Vec<String>
 }
 
-
-fn fill_number_string(number: u64, length: u64, fill_character: char, left: bool) -> String {
-    let mut ret_str = number.to_string();
-    let number_len = number.to_string().len() as u64;
-    if length > number_len {
-        let to_fill = length - number_len;
-        for _ in 0..to_fill {
-            if left {
-                ret_str = fill_character.to_string() + ret_str.as_str();
-            } else {
-                ret_str = ret_str + fill_character.to_string().as_str();
-            }
-        }
+fn bytes_to_string(bytes: u64) -> String {
+    match bytes {
+        0..=999 => format!("{:<7} B", bytes),
+        1_000..=999_999 => format!("{:<7.3} kB", bytes as f32 / 1_000f32),
+        1_000_000..=999_999_999 => format!("{:<7.3} MB", bytes as f32 / 1_000_000f32),
+        1_000_000_000.. => format!("{:<7.3} GB", bytes as f32 / 1_000_000_000f32),
     }
-    ret_str
-}
-
-fn bytes_to_string(mut bytes: u64) -> String {
-    let mut rest = 0;
-    let mut unit = "";
-    if bytes / 1000 > 0 {
-        rest = bytes % 1000;
-        bytes = bytes / 1000;
-        unit = "k";
-        if bytes / 1000 > 0 {
-            rest = bytes % 1000;
-            bytes = bytes / 1000;
-            unit = "M";
-            if bytes / 1000 > 0 {
-                rest = bytes % 1000;
-                bytes = bytes / 1000;
-                unit = "G"
-            }
-        }
-    }
-    return fill_number_string(bytes, 3, ' ', true) + "." + 
-        fill_number_string(rest, 3, '0', false).to_string().as_str() + " " + unit + "B"
 }
 
 pub async fn page_systeminfo() -> SystemInfo {
@@ -100,40 +70,37 @@ pub async fn page_systeminfo() -> SystemInfo {
         processes.push(process_information);
     }
 
-    let disks = Disks::new_with_refreshed_list();
-    let mut disk_strings = vec![];
-    for disk in disks.list() {
-        disk_strings.push(format!("{:?}", disk));
-    }
-
-    let networks = Networks::new_with_refreshed_list();
-    let mut network_strings = vec![];
-    for network in &networks {
-        network_strings.push(format!("{:?}", network));
-    }
-
-    let components = Components::new_with_refreshed_list();
-    let mut component_strings = vec![];
-    for component in &components {
-        component_strings.push(format!("{:?}", component));
-    }
+    let disks: Vec<String> = Disks::new_with_refreshed_list()
+        .iter()
+        .map(|disk| format!("{disk:?}"))
+        .collect();
     
+    let networks: Vec<String> = Networks::new_with_refreshed_list()
+        .iter()
+        .map(|network| format!("{network:?}"))
+        .collect();
+    
+    let components: Vec<String> = Networks::new_with_refreshed_list()
+        .iter()
+        .map(|component| format!("{component:?}"))
+        .collect();
+
     SystemInfo {
-        total_memory: total_memory,
-        used_memory: used_memory,
-        used_memory_percent: used_memory_percent,
-        total_swap: total_swap,
-        used_swap: used_swap,
+        total_memory,
+        used_memory,
+        used_memory_percent,
+        total_swap,
+        used_swap,
 
-        system_name: system_name,
-        kernel_version: kernel_version,
-        os_version: os_version,
-        host_name: host_name,
+        system_name,
+        kernel_version,
+        os_version,
+        host_name,
 
-        number_cpus: number_cpus,
-        processes: processes,
-        disks: disk_strings,
-        networks: network_strings,
-        components: component_strings
+        number_cpus,
+        processes,
+        disks,
+        networks,
+        components
     }
 }

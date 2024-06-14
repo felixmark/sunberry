@@ -4,24 +4,23 @@ and stores it in an SQLite Database.
 */
 
 use rusqlite::{Connection, Result};
-use std::path::PathBuf;
+use std::{path::PathBuf, time::{Duration, Instant}};
 use chrono::{
     Utc,
     naive::NaiveDateTime
 };
 use std::{thread, time};
-use log::{SetLoggerError, LevelFilter, debug, info, warn, error};
+use log::{debug, error, info, trace, warn, LevelFilter};
 use rand::Rng;
 
-use general::{predef::separator, ezlogger::EZLogger, ezlogger::ERROR_INITIALIZE};
+use general::{ezlogger::EZLogger, ezlogger::ERROR_INITIALIZE};
 
-static LOGGER: EZLogger = EZLogger {name: "collector"};
-static LOOP_INTERVAL_SECONDS: time::Duration = time::Duration::from_secs(5);
+static LOOP_INTERVAL_SECONDS: Duration = Duration::from_secs(5);
 
 #[derive(Debug)]
 struct INAMeasurement {
-    // Unsigned 128 bit (max 18,446,744,073,709,551,615 entries)
-    id: u64, // ignore: unused
+    // Unsigned 64 bit (max 18,446,744,073,709,551,616 entries)
+    id: u64,
     // Please only ever use UTC (no +/- something) 
     // for everything and let frontend handle time
     timestamp: NaiveDateTime,
@@ -47,7 +46,7 @@ fn create_table_power_consumption(conn: &Connection) -> Result<usize, rusqlite::
 }
 
 fn create_tables(conn: &Connection) -> Result<usize, rusqlite::Error> {
-    create_table_power_consumption(&conn)
+    create_table_power_consumption(conn)
 }
 
 fn insert_measurement_into_power_consumption(conn: &Connection, measurement: INAMeasurement) -> Result<usize, rusqlite::Error> {
@@ -63,7 +62,7 @@ fn insert_measurement_into_power_consumption(conn: &Connection, measurement: INA
     )
 }
 
-fn collect(conn: &Connection) -> () {
+fn collect(conn: &Connection) {
     debug!("Collecting souls.");
     let mut rng = rand::thread_rng();
     let current = rng.gen_range(0.0..1.0);
@@ -71,41 +70,49 @@ fn collect(conn: &Connection) -> () {
     let fake_ina_226_measurement = INAMeasurement {
         id: 0,  // Will be overwritten
         timestamp: Utc::now().naive_utc(),
-        current: current,
-        voltage: voltage,
+        current,
+        voltage,
         power: current * voltage
     };
-    let res = insert_measurement_into_power_consumption(&conn, fake_ina_226_measurement);
+    let res = insert_measurement_into_power_consumption(conn, fake_ina_226_measurement);
     if res.is_err() {
         error!("Unable to insert data into the database.")
     }
 }
 
 fn main() -> Result<()> {
-    log::set_logger(&LOGGER)
-        .map(|()| log::set_max_level(LevelFilter::Debug)).expect(ERROR_INITIALIZE);
+    log::set_logger(Box::leak(Box::new(EZLogger::new("/var/log/sunberry/collector.log")))).expect(ERROR_INITIALIZE);
+    log::set_max_level(LevelFilter::Trace);
+
     info!("{}", general::predef::separator());
     info!("Collector started");
 
-    let mut db_filepath = PathBuf::new();
-    db_filepath.push("/etc");
-    db_filepath.push("sunberry");
-    db_filepath.push("database");
-    db_filepath.set_extension("db");
+    let db_filepath = PathBuf::from("/etc/sunberry/database.db");
     info!("Establishing connection to: {:?}", db_filepath);
     let conn = Connection::open(db_filepath)?;
 
     info!("Creating tables if they do not exist.");
     create_tables(&conn)?;
 
-    debug!("Starting main loop.");
+    trace!("Starting main loop.");
+    let mut goal = time::Instant::now();
     loop {
         // Executed every LOOP_INTERVAL_SECONDS seconds
         // Measure time and run next loop in LOOP_INTERVAL_SECONDS - collect_time seconds
         // INFO: Drifts 0.001s every ~30s
-        let now = time::Instant::now();
         collect(&conn);
-        thread::sleep(LOOP_INTERVAL_SECONDS - now.elapsed());
+
+        let now = Instant::now();
+        goal += LOOP_INTERVAL_SECONDS;
+
+        if goal < now {
+            warn!("Collection running too slow!");
+            while goal < now {
+                goal += LOOP_INTERVAL_SECONDS;
+            }
+        }
+
+        thread::sleep(goal - now);
     }
     
     /*

@@ -11,7 +11,6 @@ use tower_http::{
 use serde::Serialize;
 
 mod pages;
-use general;
 
 async fn fallback() -> (StatusCode, &'static str) {
     (StatusCode::NOT_FOUND, "Eeeeee?! (Error 404)")
@@ -42,7 +41,7 @@ async fn main() {
         .route("/systeminfo", get(pages::systeminfo::page_systeminfo))
         .route("/book", get(pages::mdpage::page_book))
         .route("/api/v1/db_data", get(get_db_data))
-        .nest_service("/static", serve_dir.clone())
+        .nest_service("/static", serve_dir)
         .fallback(fallback);
     let listener = tokio::net::TcpListener::bind("0.0.0.0:80")
         .await
