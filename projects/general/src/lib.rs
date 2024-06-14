@@ -1,4 +1,2 @@
-
-pub fn separator() -> String {
-    "=".repeat(80)
-}
+pub mod ezlogger;
+pub mod predef;

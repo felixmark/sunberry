@@ -5,8 +5,18 @@ and stores it in an SQLite Database.
 
 use rusqlite::{Connection, Result};
 use std::path::PathBuf;
-use chrono::Utc;
-use chrono::naive::NaiveDateTime; 
+use chrono::{
+    Utc,
+    naive::NaiveDateTime
+};
+use std::{thread, time};
+use log::{SetLoggerError, LevelFilter, debug, info, warn, error};
+use rand::Rng;
+
+use general::{predef::separator, ezlogger::EZLogger, ezlogger::INITIALIZE_ERROR};
+
+static LOGGER: EZLogger = EZLogger;
+static LOOP_INTERVAL_SECONDS: time::Duration = time::Duration::from_secs(5);
 
 #[derive(Debug)]
 struct INAMeasurement {
@@ -41,6 +51,7 @@ fn create_tables(conn: &Connection) -> Result<usize, rusqlite::Error> {
 }
 
 fn insert_measurement_into_power_consumption(conn: &Connection, measurement: INAMeasurement) -> Result<usize, rusqlite::Error> {
+    debug!("Inserting measurement into database: {:?}", measurement);
     conn.execute(
         "INSERT INTO power_consumption (timestamp, current, voltage, power) VALUES (?1, ?2, ?3, ?4)",
         (
@@ -52,24 +63,52 @@ fn insert_measurement_into_power_consumption(conn: &Connection, measurement: INA
     )
 }
 
+fn collect(conn: &Connection) -> () {
+    debug!("Collecting souls.");
+    let mut rng = rand::thread_rng();
+    let current = rng.gen_range(0.0..1.0);
+    let voltage = rng.gen_range(0.0..20.0);
+    let fake_ina_226_measurement = INAMeasurement {
+        id: 0,  // Will be overwritten
+        timestamp: Utc::now().naive_utc(),
+        current: current,
+        voltage: voltage,
+        power: current * voltage
+    };
+    let res = insert_measurement_into_power_consumption(&conn, fake_ina_226_measurement);
+    if res.is_err() {
+        error!("Unable to insert data into the database.")
+    }
+}
+
 fn main() -> Result<()> {
+    log::set_logger(&LOGGER)
+        .map(|()| log::set_max_level(LevelFilter::Debug)).expect(INITIALIZE_ERROR);
+    info!("{}", general::predef::separator());
+    info!("Collector started");
+
     let mut db_filepath = PathBuf::new();
     db_filepath.push("/etc");
     db_filepath.push("sunberry");
     db_filepath.push("database");
     db_filepath.set_extension("db");
+    info!("Establishing connection to: {:?}", db_filepath);
     let conn = Connection::open(db_filepath)?;
 
+    info!("Creating tables if they do not exist.");
     create_tables(&conn)?;
-    let my_measurement = INAMeasurement {
-        id: 0,
-        timestamp: Utc::now().naive_utc(),
-        current: 0.01,
-        voltage: 18.0,
-        power: 0.18
-    };
-    insert_measurement_into_power_consumption(&conn, my_measurement)?;
 
+    debug!("Starting main loop.");
+    loop {
+        // Executed every LOOP_INTERVAL_SECONDS seconds
+        // Measure time and run next loop in LOOP_INTERVAL_SECONDS - collect_time seconds
+        // INFO: Drifts 0.001s every ~30s
+        let now = time::Instant::now();
+        collect(&conn);
+        thread::sleep(LOOP_INTERVAL_SECONDS - now.elapsed());
+    }
+    
+    /*
     let mut stmt = conn.prepare(
         "SELECT id, timestamp, current, voltage, power FROM power_consumption"
     )?;
@@ -87,4 +126,5 @@ fn main() -> Result<()> {
         println!("Found {:?}", measurement.unwrap());
     }
     Ok(())
+    */
 }

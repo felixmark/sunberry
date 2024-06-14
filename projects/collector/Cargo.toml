@@ -4,5 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+general = { path = "../general" }
 chrono = "0.4.38"
+log = "0.4.21"
 rusqlite = { version = "0.31.0", features = ["bundled", "chrono"] }
+rand = "0.8.5"
