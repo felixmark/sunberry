@@ -44,7 +44,7 @@ async fn main() {
         .route("/api/v1/db_data", get(get_db_data))
         .nest_service("/static", serve_dir.clone())
         .fallback(fallback);
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:8010")
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:80")
         .await
         .unwrap();
     tracing::info!("Listening on {}", listener.local_addr().unwrap());
