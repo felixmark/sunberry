@@ -90,7 +90,7 @@ fn insert_measurement_into_system(conn: &Connection, measurement: dbstructs::Sys
 }
 
 fn get_system_measurement() -> dbstructs::SystemMeasurement {
-    let mut sys = System::new_all();
+    let sys = System::new_all();
 
     // Disk usage
     let disks = Disks::new_with_refreshed_list();
