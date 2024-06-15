@@ -32,7 +32,7 @@ async fn get_db_data() -> Json<DBData> {
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt().init();
-    tracing::info!("{}", general::predef::separator());
+    tracing::info!("{}", shared::predef::separator());
     tracing::info!("Webserver started");
 
     let serve_dir = ServeDir::new("static").not_found_service(ServeFile::new("static"));
