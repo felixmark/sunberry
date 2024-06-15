@@ -54,15 +54,18 @@ pub async fn page_systeminfo() -> SystemInfo {
   
     let number_cpus = sys.cpus().len();
     let mut processes = vec![];
+    let mut session_ids = vec![];
     let mut sys_processes: Vec<(&Pid, &Process)> = sys.processes().iter().collect();
     sys_processes.sort_by(|a, b| b.1.memory().cmp(&a.1.memory()));
     for (_pid, process) in sys_processes {
         let mut should_continue = process.name().starts_with("kworker");
         should_continue |= process.memory() == 0;
+        should_continue |= session_ids.contains(&process.session_id());
         // process.session_id(); // <- cool zum finden der einzelnen Tasks
         if should_continue {
             continue;
         }
+        session_ids.push(process.session_id());
         let process_information = ProcessInformation {
             name: process.name().to_string(),
             memory: bytes_to_string(process.memory()),
