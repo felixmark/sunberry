@@ -59,6 +59,7 @@ pub async fn page_systeminfo() -> SystemInfo {
     for (_pid, process) in sys_processes {
         let mut should_continue = process.name().starts_with("kworker");
         should_continue |= process.memory() == 0;
+        // process.session_id(); // <- cool zum finden der einzelnen Tasks
         if should_continue {
             continue;
         }
