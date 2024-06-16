@@ -1,5 +1,13 @@
 use rusqlite::Connection;
 
+pub fn create_tables(conn: &Connection) -> Result<usize, rusqlite::Error> {
+    let mut total_len = 0;
+    total_len += create_table_power_consumptions(conn)?;
+    total_len += create_table_system_logs(conn)?;
+    total_len += create_table_pv_power(conn)?;
+    Ok(total_len)
+}
+
 
 pub fn create_table_power_consumptions(conn: &Connection) -> Result<usize, rusqlite::Error> {
     conn.execute(
