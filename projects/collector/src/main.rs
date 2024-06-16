@@ -5,11 +5,9 @@ and stores it in an SQLite Database.
 
 use rusqlite::{Connection, Result};
 use std::{path::PathBuf, time::{Duration, Instant}};
-use chrono::Utc;
 use std::{thread, time};
 use log::{debug, error, info, trace, warn, LevelFilter};
-use rand::Rng;
-use shared::{dbstructs::{self, INAMeasurement, SystemMeasurement}, ezlogger::{EZLogger, ERROR_INITIALIZE}};
+use shared::{dbstructs::{self}, ezlogger::{EZLogger, ERROR_INITIALIZE}};
 
 mod tables;
 mod measure;
