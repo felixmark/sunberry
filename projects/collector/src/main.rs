@@ -144,7 +144,7 @@ fn collect(conn: &Connection) {
     // INA measurement will be here
     let mut rng = rand::thread_rng();
     let current = rng.gen_range(0.0..1.0);
-    let voltage = rng.gen_range(0.0..20.0);
+    let voltage = rng.gen_range(0.0..10.0);
     let fake_ina_226_measurement = dbstructs::INAMeasurement {
         id: 0,  // Will be overwritten
         timestamp: Utc::now().naive_utc(),
@@ -176,40 +176,17 @@ fn main() -> Result<()> {
     let mut goal = time::Instant::now();
     loop {
         // Executed every LOOP_INTERVAL_SECONDS seconds
-        // Measure time and run next loop in LOOP_INTERVAL_SECONDS - collect_time seconds
-        // INFO: Drifts 0.001s every ~30s
         collect(&conn);
 
+        // Check loop time, calculate next loop time and sleep until then
         let now = Instant::now();
         goal += LOOP_INTERVAL_SECONDS;
-
         if goal < now {
             warn!("Collection running too slow!");
             while goal < now {
                 goal += LOOP_INTERVAL_SECONDS;
             }
         }
-
         thread::sleep(goal - now);
     }
-    
-    /*
-    let mut stmt = conn.prepare(
-        "SELECT id, timestamp, current, voltage, power FROM power_consumptions"
-    )?;
-    let measurement_iter = stmt.query_map([], |row| {
-        Ok(INAMeasurement {
-            id: row.get(0)?,
-            timestamp: row.get(1)?,
-            current: row.get(2)?,
-            voltage: row.get(3)?,
-            power: row.get(4)?,
-        })
-    })?;
-
-    for measurement in measurement_iter {
-        println!("Found {:?}", measurement.unwrap());
-    }
-    Ok(())
-    */
 }

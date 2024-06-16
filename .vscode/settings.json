@@ -1,13 +1,4 @@
 {
     "rust-analyzer.checkOnSave": true,
     "rust-analyzer.check.command": "clippy",
-    "sqltools.connections": [
-        {
-            "previewLimit": 50,
-            "driver": "SQLite",
-            "name": "Sunberry DB",
-            "database": "/etc/sunberry/database.db"
-        }
-    ],
-    "sqltools.useNodeRuntime": true
 }

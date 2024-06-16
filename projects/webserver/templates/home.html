@@ -7,9 +7,19 @@
 <p>
   This website is hosted on a 100% photovoltaics powered server.
 </p>
+
+<h1>Power</h1>
+<p>Currently faked</p>
 <div class="chart-container" style="position: relative; height:40vh; width: 100%;">
-  <canvas id="myChart"></canvas>
+  <canvas id="power_chart"></canvas>
 </div>
+
+<h1>System</h1>
+<p>Real system stats</p>
+<div class="chart-container" style="position: relative; height:40vh; width: 100%;">
+  <canvas id="system_chart"></canvas>
+</div>
+
 <p>
   GitHub repository:
   <a href="https://github.com/felixmark/sunberry">https://github.com/felixmark/sunberry</a>
@@ -17,22 +27,22 @@
 
 <script src="/static/js/chart.js"></script>
 <script>
-  const ctx = document.getElementById('myChart');
+  const ctx = document.getElementById('power_chart');
 
   let chart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: [1, 2, 3, 4, 5, 6],
+      labels: [],
       datasets: [{
         label: 'Power used (W)',
-        data: null,
+        data: [],
         borderWidth: 3,
         borderColor: "#559598",
         backgroundColor: "#55959840",
         fill: true,
       }, {
         label: 'Photovoltaic power (W)',
-        data: [0, 3, 20, 14, 5, 0],
+        data: [],
         borderWidth: 3,
         borderColor: "#d79921",
         backgroundColor: "#d7992120",
@@ -47,6 +57,11 @@
       scales: {
         y: {
           max: 22,
+        },
+        x: {
+          ticks: {
+            maxTicksLimit: 2
+          }
         }
       },
       maintainAspectRatio: false,
@@ -69,16 +84,102 @@
     }
   });
 
-  const dbDataRequest = new Request("api/v1/db_data?from=13.06.2024&to=13.06.2024");
+  const dbDataRequest = new Request("/api/v1/power_consumption?from=13.06.2024&to=13.06.2024");
   fetch(dbDataRequest).then((response) => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     return response.json()
   }).then((dbDataObject) => {
-    power_used = dbDataObject["power_used"];
+    let entries = dbDataObject["data"];
+    let timestamps = [];
+    let power_used = [];
+    let pv_power = [];
+    entries.forEach(element => {
+      timestamps.push(new Date(element["timestamp"]).toLocaleString("DE"));
+      power_used.push(element["power"]);
+      pv_power.push(element["voltage"]); // TODO Remove and replace with other request
+    });
+    chart.data.labels = timestamps;
     chart.data.datasets[0].data = power_used;
+    chart.data.datasets[1].data = pv_power;
     chart.update();
+  });
+
+
+
+
+
+
+
+
+  // System chart
+  const system_ctx = document.getElementById('system_chart');
+  let system_chart = new Chart(system_ctx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Memory usage %',
+        data: [],
+        borderWidth: 3,
+        borderColor: "#cc1d46",
+        backgroundColor: "#cc1d4640",
+        fill: true,
+      }],
+    },
+    options: {
+      interaction: {
+        intersect: false,
+        mode: 'index',
+      },
+      scales: {
+        y: {
+          max: 100,
+        },
+        x: {
+          ticks: {
+            maxTicksLimit: 2
+          }
+        }
+      },
+      maintainAspectRatio: false,
+      cubicInterpolationMode: 'monotone',
+      tension: 0.5,
+      pointRadius: 0,
+      pointHitRadius: 20,
+      plugins: {
+        legend: {
+          labels: {
+            usePointStyle: true,
+            boxHeight: 7,
+          }
+        },
+        tooltip: {
+          usePointStyle: true,
+          multiKeyBackground: "#00000000"
+        }
+      }
+    }
+  });
+
+  const systemDataRequest = new Request("/api/v1/system?from=13.06.2024&to=13.06.2024");
+  fetch(systemDataRequest).then((response) => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json()
+  }).then((dbDataObject) => {
+    let entries = dbDataObject["data"];
+    let timestamps = [];
+    let memory_usage = [];
+    entries.forEach(element => {
+      timestamps.push(new Date(element["timestamp"]).toLocaleString("DE"));
+      memory_usage.push(element["used_memory_percent"]);
+    });
+    system_chart.data.labels = timestamps;
+    system_chart.data.datasets[0].data = memory_usage;
+    system_chart.update();
   });
 </script>
 {% endblock %}

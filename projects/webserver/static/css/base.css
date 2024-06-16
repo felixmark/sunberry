@@ -63,12 +63,12 @@ a {
 .green { color: #8ec07c; }
 .blue, a { color: #559598; }
 .yellow { color: #d79921; }
-.red { color: #cc241d; }
+.red { color: #cc1d46; }
 .black { color: #3c3836; }
 .bg-white { color: #f0f0f0; }
 .bg-green { background: #8ec07c; }
 .bg-blue { background: #559598; }
 .bg-yellow { background: #d79921; }
-.bg-red { background: #cc241d; }
+.bg-red { background: #cc1d46; }
 .bg-black { background: #3c3836; }
 .bg-blacker { background: #282625; }

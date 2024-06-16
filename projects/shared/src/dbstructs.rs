@@ -1,6 +1,7 @@
 use chrono::naive::NaiveDateTime;
+use serde::Serialize;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct INAMeasurement {
     // Unsigned 64 bit (max 18,446,744,073,709,551,616 entries)
     pub id: u64,
@@ -15,7 +16,7 @@ pub struct INAMeasurement {
     pub power: f32,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct SystemMeasurement {
     pub id: u64,
     pub timestamp: NaiveDateTime,
