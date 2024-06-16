@@ -116,7 +116,7 @@ async fn main() {
         .route("/api/v1/system", get(get_system_info_data))
         .nest_service("/static", serve_dir)
         .fallback(fallback);
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:8080")
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:80")
         .await
         .unwrap();
     tracing::info!("Listening on {}", listener.local_addr().unwrap());
