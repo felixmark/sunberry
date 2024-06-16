@@ -69,19 +69,22 @@ async fn get_power_pv() -> Result<Json<JsonResponse<Vec<dbstructs::INAMeasuremen
 }
 
 async fn get_system_info_data() -> Result<Json<JsonResponse<Vec<SystemMeasurement>>>, (StatusCode, String)> {
+    let from = Utc::now() - Duration::days(1);
+    let to = Utc::now();
     let db_connection = DB_CONNECTION.lock().unwrap();
-    let mut stmt = db_connection.prepare(
-        "SELECT 
-            id,
-            timestamp,
-            used_memory_percent,
-            used_swap_percent,
-            used_disk_percent,
-            used_cpu_percent,
-            cpu_temperature,
-            running_processes
-            FROM system_logs"
-        ).expect("Selecting did not work.");
+    let string_statement = format!("SELECT 
+        id,
+        timestamp,
+        used_memory_percent,
+        used_swap_percent,
+        used_disk_percent,
+        used_cpu_percent,
+        cpu_temperature,
+        running_processes
+        FROM system_logs
+        WHERE timestamp >= \"{}\" AND timestamp <= \"{}\"",
+        from, to);
+    let mut stmt = db_connection.prepare(&string_statement).expect("Selecting did not work.");
     let entry_iter = stmt.query_map([], |row| {
         Ok(dbstructs::SystemMeasurement {
             id: row.get(0)?,
