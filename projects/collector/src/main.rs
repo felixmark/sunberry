@@ -122,7 +122,7 @@ fn get_system_measurement() -> dbstructs::SystemMeasurement {
     SystemMeasurement {
         id: 0,
         timestamp: Utc::now().naive_utc(),
-        used_memory_percent: (sys.available_memory() as f32 / sys.total_memory() as f32) * 100.0,
+        used_memory_percent: (sys.used_memory() as f32 / sys.total_memory() as f32) * 100.0,
         used_swap_percent: (sys.used_swap() as f32 / sys.total_swap() as f32) * 100.0,
         running_processes: sys.processes().len() as i32,
         used_disk_percent: largest_disk_usage,
