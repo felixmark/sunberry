@@ -6,8 +6,8 @@ and stores it in an SQLite Database.
 use rusqlite::{Connection, Result};
 use std::{path::PathBuf, time::{Duration, Instant}};
 use std::{thread, time};
-use log::{debug, error, info, trace, warn, LevelFilter};
-use shared::{dbstructs::{self}, ezlogger::{EZLogger, ERROR_INITIALIZE}};
+use log::{debug, info, trace, warn, error, LevelFilter};
+use shared::ezlogger::{EZLogger, ERROR_INITIALIZE};
 
 mod tables;
 mod measure;
@@ -43,7 +43,9 @@ fn main() -> Result<()> {
     let mut goal = time::Instant::now();
     loop {
         // Executed every LOOP_INTERVAL_SECONDS seconds
-        collect(&conn);
+        if collect(&conn).is_err() {
+            error!("Unable to collect all the data!");
+        }
 
         // Check loop time, calculate next loop time and sleep until then
         let now = Instant::now();
