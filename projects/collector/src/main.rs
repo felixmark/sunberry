@@ -20,7 +20,7 @@ fn collect(conn: &Connection) -> Result<()> {
     debug!("Collecting souls.");
     let system_measurement = measure::get_system_measurement();
     db_insert::insert_measurement_into_system(conn, system_measurement)?;
-    db_insert::insert_measurement_into(conn, "power_consumption", measure::get_power_usage_measurement())?;
+    db_insert::insert_measurement_into(conn, "power_consumptions", measure::get_power_usage_measurement())?;
     db_insert::insert_measurement_into(conn, "pv_powers", measure::get_pv_power_measurement())?;
     Ok(())
 }
