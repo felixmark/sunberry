@@ -93,7 +93,7 @@ pub async fn get_system_info_data(State(state): State<Arc<AppState>>) -> Result<
 
 pub fn router() -> axum::Router<std::sync::Arc<AppState>> {
     Router::new()
-        .route("power_pv", get(get_power_pv))
-        .route("power_consumption", get(get_power_consumption))
-        .route("system", get(get_system_info_data))
+        .route("/power_pv", get(get_power_pv))
+        .route("/power_consumption", get(get_power_consumption))
+        .route("/system", get(get_system_info_data))
 }
