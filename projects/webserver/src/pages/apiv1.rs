@@ -1,14 +1,12 @@
 
 
 use std::sync::Arc;
-use axum::extract::State;
 use serde::Serialize;
 use chrono::{DateTime, Duration, Utc};
 use axum::{
-    http::StatusCode,
-    Json
+    extract::State, http::StatusCode, routing::get, Json, Router
 };
-use shared::dbstructs::{self, SystemMeasurement};
+use shared::dbstructs::{self, INAMeasurement, SystemMeasurement};
 use crate::AppState;
 
 #[derive(Serialize)]
@@ -17,7 +15,7 @@ pub struct JsonResponse<T> {
     timestamp: DateTime<Utc>
 }
 
-async fn get_ina_db_entries(State(state): State<Arc<AppState>>, table_name: &str, from: DateTime<Utc>, to: DateTime<Utc>) -> Result<Json<JsonResponse<Vec<dbstructs::INAMeasurement>>>, (StatusCode, String)> {
+async fn get_ina_db_entries(State(state): State<Arc<AppState>>, table_name: &str, from: DateTime<Utc>, to: DateTime<Utc>) -> Result<Json<JsonResponse<Vec<INAMeasurement>>>, (StatusCode, &'static str)> {
     let db_connection = state.db_connection.lock().unwrap();
     let string_statement = format!(
         "SELECT id, timestamp, current, voltage, power FROM {} WHERE timestamp >= \"{}\" AND timestamp <= \"{}\"",
@@ -41,21 +39,21 @@ async fn get_ina_db_entries(State(state): State<Arc<AppState>>, table_name: &str
     }))
 }
 
-pub async fn get_power_consumption(State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<dbstructs::INAMeasurement>>>, (StatusCode, String)> {
+pub async fn get_power_consumption(State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<INAMeasurement>>>, (StatusCode, &'static str)> {
     // TODO Get from and to from request parameters
     let from = Utc::now() - Duration::days(1);
     let to = Utc::now();
     get_ina_db_entries(State(state), "power_consumptions", from, to).await
 }
 
-pub async fn get_power_pv(State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<dbstructs::INAMeasurement>>>, (StatusCode, String)> {
+pub async fn get_power_pv(State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<INAMeasurement>>>, (StatusCode, &'static str)> {
     // TODO Implement pv_power table and such
     let from = Utc::now() - Duration::days(1);
     let to = Utc::now();
-    get_ina_db_entries(State(state), "pv_power", from, to).await
+    get_ina_db_entries(State(state), "pv_powers", from, to).await
 }
 
-pub async fn get_system_info_data(State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<SystemMeasurement>>>, (StatusCode, String)> {
+pub async fn get_system_info_data(State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<SystemMeasurement>>>, (StatusCode, &'static str)> {
     let db_connection = state.db_connection.lock().unwrap();
     let from = Utc::now() - Duration::days(1);
     let to = Utc::now();
@@ -91,4 +89,11 @@ pub async fn get_system_info_data(State(state): State<Arc<AppState>>) -> Result<
         data: entries,
         timestamp: Utc::now()
     }))
+}
+
+pub fn router() -> axum::Router<std::sync::Arc<AppState>> {
+    Router::new()
+        .route("power_pv", get(get_power_pv))
+        .route("power_consumption", get(get_power_consumption))
+        .route("system", get(get_system_info_data))
 }

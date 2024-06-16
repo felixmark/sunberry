@@ -1,7 +1,5 @@
 use std::{path::PathBuf, sync::{Arc, Mutex}};
-
 use axum::{
-    http::StatusCode,
     routing::get,
     Router,
 };
@@ -16,10 +14,6 @@ mod pages;
 
 struct AppState {
     db_connection: Mutex<Connection>
-}
-
-async fn fallback() -> (StatusCode, &'static str) {
-    (StatusCode::NOT_FOUND, "Eeeeee?! (Error 404)")
 }
 
 #[tracing::instrument(ret)]
@@ -38,11 +32,13 @@ async fn main() {
         .route("/", get(pages::home::page_home))
         .route("/systeminfo", get(pages::systeminfo::page_systeminfo))
         .route("/book", get(pages::mdpage::page_book))
-        .route("/api/v1/power_pv", get(pages::api::get_power_pv))
-        .route("/api/v1/power_consumption", get(pages::api::get_power_consumption))
-        .route("/api/v1/system", get(pages::api::get_system_info_data))
+        // API v1
+        .nest("/api/v1", pages::apiv1::router())
+        // Static files
         .nest_service("/static", serve_dir)
-        .fallback(fallback)
+        // 404 fallback
+        .fallback(pages::other::fallback)
+        // Pass state into calls
         .with_state(shared_state);
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8080")
         .await
