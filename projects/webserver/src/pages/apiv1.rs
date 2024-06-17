@@ -18,7 +18,7 @@ pub struct JsonResponse<T> {
 async fn get_ina_db_entries(State(state): State<Arc<AppState>>, table_name: &str, from: DateTime<Utc>, to: DateTime<Utc>) -> Result<Json<JsonResponse<Vec<INAMeasurement>>>, (StatusCode, &'static str)> {
     let db_connection = state.db_connection.lock().unwrap();
     let string_statement = format!(
-        "SELECT id, timestamp, current, voltage, power FROM {} WHERE timestamp >= \"{}\" AND timestamp <= \"{}\"",
+        "SELECT id, timestamp, current, voltage, power FROM {} WHERE timestamp >= \"{}\" AND timestamp <= \"{}\" AND id % 30 = 0",
         table_name, from, to
     );
     let mut stmt = db_connection.prepare(&string_statement).expect("Selecting did not work.");
@@ -67,7 +67,7 @@ pub async fn get_system_info_data(State(state): State<Arc<AppState>>) -> Result<
         cpu_temperature,
         running_processes
         FROM system_logs
-        WHERE timestamp >= \"{}\" AND timestamp <= \"{}\"",
+        WHERE timestamp >= \"{}\" AND timestamp <= \"{}\"  AND id % 30 = 0",
         from, to);
     let mut stmt = db_connection.prepare(&string_statement).expect("Selecting did not work.");
     let entry_iter = stmt.query_map([], |row| {
