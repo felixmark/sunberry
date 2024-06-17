@@ -67,7 +67,7 @@ pub async fn get_system_info_data(State(state): State<Arc<AppState>>) -> Result<
         cpu_temperature,
         running_processes
         FROM system_logs
-        WHERE timestamp >= \"{}\" AND timestamp <= \"{}\"  AND id % 30 = 0",
+        WHERE timestamp >= \"{}\" AND timestamp <= \"{}\" AND id % 30 = 0",
         from, to);
     let mut stmt = db_connection.prepare(&string_statement).expect("Selecting did not work.");
     let entry_iter = stmt.query_map([], |row| {
