@@ -16,7 +16,7 @@ pub fn get_system_measurement() -> dbstructs::SystemMeasurement {
     for disk in disks.iter() {
         if disk.total_space() > largest_disk {
             largest_disk = disk.total_space();
-            largest_disk_usage = (
+            largest_disk_usage = 100.0 * (
                 disk.total_space() as f32 - disk.available_space() as f32
                 ) / disk.total_space() as f32;
         }

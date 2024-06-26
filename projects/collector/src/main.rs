@@ -17,7 +17,6 @@ static LOOP_INTERVAL_SECONDS: Duration = Duration::from_secs(5);
 
 
 fn collect(conn: &Connection) -> Result<()> {
-    debug!("Collecting souls.");
     db_insert::insert_measurement_into_system(conn, measure::get_system_measurement())?;
     db_insert::insert_measurement_into(conn, "power_consumptions", measure::get_power_usage_measurement())?;
     db_insert::insert_measurement_into(conn, "pv_powers", measure::get_pv_power_measurement())?;
@@ -26,7 +25,7 @@ fn collect(conn: &Connection) -> Result<()> {
 
 fn main() -> Result<()> {
     log::set_logger(Box::leak(Box::new(EZLogger::new("/var/log/sunberry/collector.log")))).expect(ERROR_INITIALIZE);
-    log::set_max_level(LevelFilter::Trace);
+    log::set_max_level(LevelFilter::Info);
 
     info!("{}", shared::predef::separator());
     info!("Collector started");

@@ -123,11 +123,25 @@
     data: {
       labels: [],
       datasets: [{
-        label: 'Memory usage %',
+        label: 'Memory usage (%)',
+        data: [],
+        borderWidth: 3,
+        borderColor: "#559598",
+        backgroundColor: "#55959840",
+        fill: true,
+      }, {
+        label: 'CPU temp (°C)',
         data: [],
         borderWidth: 3,
         borderColor: "#cc1d46",
         backgroundColor: "#cc1d4640",
+        fill: true,
+      }, {
+        label: 'Disk usage (%)',
+        data: [],
+        borderWidth: 3,
+        borderColor: "#d79921",
+        backgroundColor: "#d7992120",
         fill: true,
       }],
     },
@@ -180,12 +194,18 @@
     let entries = dbDataObject["data"];
     let timestamps = [];
     let memory_usage = [];
+    let cpu_temperature = [];
+    let used_disk_percent = [];
     entries.forEach(element => {
       timestamps.push(new Date(element["timestamp"]).toLocaleString("DE"));
       memory_usage.push(element["used_memory_percent"]);
+      cpu_temperature.push(element["cpu_temperature"]);
+      used_disk_percent.push(element["used_disk_percent"]);
     });
     system_chart.data.labels = timestamps;
     system_chart.data.datasets[0].data = memory_usage;
+    system_chart.data.datasets[1].data = cpu_temperature;
+    system_chart.data.datasets[2].data = used_disk_percent;
     system_chart.update();
   });
 </script>
