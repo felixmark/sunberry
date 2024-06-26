@@ -17,8 +17,15 @@ pub struct JsonResponse<T> {
 
 async fn get_ina_db_entries(State(state): State<Arc<AppState>>, table_name: &str, from: DateTime<Utc>, to: DateTime<Utc>) -> Result<Json<JsonResponse<Vec<INAMeasurement>>>, (StatusCode, &'static str)> {
     let db_connection = state.db_connection.lock().unwrap();
-    let string_statement = format!(
-        "SELECT id, timestamp, current, voltage, power FROM {} WHERE timestamp >= \"{}\" AND timestamp <= \"{}\" AND id % 30 = 0",
+    let string_statement = format!("SELECT 
+        id, 
+        min(timestamp), 
+        avg(current), 
+        avg(voltage), 
+        avg(power) 
+        FROM {} 
+        WHERE timestamp >= \"{}\" AND timestamp <= \"{}\" 
+        GROUP BY strftime('%s',timestamp) / 600",
         table_name, from, to
     );
     let mut stmt = db_connection.prepare(&string_statement).expect("Selecting did not work.");
@@ -57,17 +64,19 @@ pub async fn get_system_info_data(State(state): State<Arc<AppState>>) -> Result<
     let db_connection = state.db_connection.lock().unwrap();
     let from = Utc::now() - Duration::days(1);
     let to = Utc::now();
+
     let string_statement = format!("SELECT 
         id,
-        timestamp,
-        used_memory_percent,
-        used_swap_percent,
-        used_disk_percent,
-        used_cpu_percent,
-        cpu_temperature,
-        running_processes
+        min(timestamp),
+        avg(used_memory_percent),
+        avg(used_swap_percent),
+        avg(used_disk_percent),
+        avg(used_cpu_percent),
+        avg(cpu_temperature),
+        max(running_processes)
         FROM system_logs
-        WHERE timestamp >= \"{}\" AND timestamp <= \"{}\" AND id % 30 = 0",
+        WHERE timestamp >= \"{}\" AND timestamp <= \"{}\"
+        GROUP BY strftime('%s',timestamp) / 600",
         from, to);
     let mut stmt = db_connection.prepare(&string_statement).expect("Selecting did not work.");
     let entry_iter = stmt.query_map([], |row| {
