@@ -4,11 +4,12 @@ use axum::{
     Router,
 };
 use rusqlite::Connection;
+use shared::ezlogger::{EZLogger, ERROR_INITIALIZE};
 use tower_http::{
     services::ServeDir, 
     services::ServeFile
 };
-use tracing::info;
+use log::{debug, info, trace, warn, error, LevelFilter};
 
 mod pages;
 
@@ -16,10 +17,10 @@ struct AppState {
     db_connection: Mutex<Connection>
 }
 
-#[tracing::instrument(ret)]
 #[tokio::main]
 async fn main() {
-    tracing_subscriber::fmt().init();
+    log::set_logger(Box::leak(Box::new(EZLogger::new("/var/log/sunberry/webserver.log")))).expect(ERROR_INITIALIZE);
+    log::set_max_level(LevelFilter::Info);
     info!("{}", shared::predef::separator());
     info!("Webserver started");
 
@@ -43,7 +44,7 @@ async fn main() {
     let listener = tokio::net::TcpListener::bind("0.0.0.0:80")
         .await
         .unwrap();
-    tracing::info!("Listening on {}", listener.local_addr().unwrap());
+    info!("Listening on {}", listener.local_addr().unwrap());
     axum::serve(listener, app)
         .await
         .unwrap();
