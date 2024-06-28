@@ -1,0 +1,14 @@
+[Unit]
+Description=Sunberry Collector
+After=network.target
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=5
+User=sunshine
+WorkingDirectory=/etc/sunberry/projects/collector
+ExecStart=/etc/sunberry/projects/collector/collector
+
+[Install]
+WantedBy=multi-user.target
