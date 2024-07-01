@@ -21,14 +21,21 @@
   <div id="title-wrapper" class="bg-yellow wrapper">
     <div id="title" class="white content">
       <img src="/static/img/physalis.png" height="30" style="position: absolute; top: 5px;">
-      <div style="margin-left: 45px;">{% block title %}Base{% endblock %}</div>
-    </div>
-  </div>
-  <div id="menu-wrapper" class="bg-blacker wrapper">
-    <div id="menu" class="white content">
-      <a href="/"><i class="fa-solid fa-house"></i> Home</a>
-      <a href="/systeminfo"><i class="fa-solid fa-server"></i> System info</a>
-      <a href="/book"><i class="fa-solid fa-book"></i> Book</a>
+
+      <div id="menu" class="white">
+        <a href="/">
+          {% if page == "home" %}<span class="white"><i class="fa-solid fa-house"></i> Home</span>
+          {% else %}<span class="black"><i class="fa-solid fa-house"></i> Home</span>{% endif %}
+        </a>
+        <a href="/systeminfo">
+          {% if page == "systeminfo" %}<span class="white"><i class="fa-solid fa-server"></i> System info</span>
+          {% else %}<span class="black"><i class="fa-solid fa-server"></i>  System info</span>{% endif %}
+        </a>
+        <a href="/book">
+          {% if page == "book" %}<span class="white"><i class="fa-solid fa-book"></i> Book</span>
+          {% else %}<span class="black"><i class="fa-solid fa-book"></i> Book</a></span>{% endif %}
+        </a>
+      </div>
     </div>
   </div>
   <div id="content-wrapper" class="wrapper">

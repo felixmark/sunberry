@@ -5,7 +5,7 @@ use std::path::PathBuf;
 #[derive(Template)]
 #[template(path = "mdpage.html")]
 pub struct MarkdownPage {
-    title: String,
+    page: String,
     md_content: String,
 }
 
@@ -27,7 +27,7 @@ async fn deliver_md_file(md_file: &str) -> Result<MarkdownPage, StatusCode> {
 
     // Markdown file exists. Deliver it.
     Ok(MarkdownPage {
-        title: md_file.replace('_', " "),
+        page: md_file.to_string(),
         md_content
     })
 }

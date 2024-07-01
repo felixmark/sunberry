@@ -1,4 +1,5 @@
 use askama_axum::Template;
+use serde_json::to_string;
 use sysinfo::{
     Components, Disks, Networks, Pid, Process, System
 };
@@ -12,6 +13,8 @@ struct ProcessInformation {
 #[derive(Template)]
 #[template(path = "systeminfo.html")]
 pub struct SystemInfo {
+    page: String,
+
     total_memory: String,
     used_memory: String,
     used_memory_percent: String,
@@ -87,6 +90,8 @@ pub async fn page_systeminfo() -> SystemInfo {
         .collect();
 
     SystemInfo {
+        page: "systeminfo".to_string(),
+
         total_memory,
         used_memory,
         used_memory_percent,

@@ -1,0 +1,26 @@
+
+.project-pictures {
+    text-align: center;
+    width: 100%;
+    margin: 60px 0 120px 0;
+}
+.project-pictures td {
+    padding-right: 20px;
+}
+.project-pictures .image {
+    width: 120px;
+    height: 120px;
+    max-width: 15vw;
+    max-height: 15vw;
+    background: #00000020;
+    border-radius: 50%;
+    padding: min(25px, 4vw);
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+.project-pictures .image img {
+    max-width: 100%;
+    max-height: 100%;
+}

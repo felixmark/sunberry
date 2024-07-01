@@ -1,12 +1,31 @@
 {% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
-
 {% block content %}
+<link rel="stylesheet" href="/static/css/home.css">
 <h1>Welcome to Sunberry!</h1>
-<p>
-  This website is hosted on a 100% photovoltaics powered server.
-</p>
+
+<table class="project-pictures">
+  <tr>
+    <td>
+      <div class="image"><img src="/static/img/solar-panel.png"></div>
+    </td>
+    <td>
+      <div class="image"><img src="/static/img/energy_efficient.png"></div>      
+    </td>
+    <td>
+      <div class="image"><img src="/static/img/cuddlyferris.svg"></div>      
+    </td>
+    <td>
+      <div class="image"><img src="/static/img/educational.png"></div>      
+    </td>
+  </tr>
+  <tr>
+    <td>100% Solar powered</td>
+    <td>100% Energy efficient</td>
+    <td>100% Rust</td>
+    <td>100% Educational</td>
+  </tr>
+</table>
 
 <h1>Power</h1>
 <p>Currently faked</p>
@@ -26,187 +45,5 @@
 </p>
 
 <script src="/static/js/chart.js"></script>
-<script>
-  const ctx = document.getElementById('power_chart');
-
-  let chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: [],
-      datasets: [{
-        label: 'Power used (W)',
-        data: [],
-        borderWidth: 3,
-        borderColor: "#559598",
-        backgroundColor: "#55959840",
-        fill: true,
-      }, {
-        label: 'Photovoltaic power (W)',
-        data: [],
-        borderWidth: 3,
-        borderColor: "#d79921",
-        backgroundColor: "#d7992120",
-        fill: true,
-      }],
-    },
-    options: {
-      interaction: {
-        intersect: false,
-        mode: 'index',
-      },
-      scales: {
-        y: {
-          max: 22,
-        },
-        x: {
-          ticks: {
-            maxTicksLimit: 2
-          }
-        }
-      },
-      animation: {
-        duration: 0
-      },
-      maintainAspectRatio: false,
-      cubicInterpolationMode: 'monotone',
-      tension: 0.5,
-      pointRadius: 0,
-      pointHitRadius: 20,
-      plugins: {
-        legend: {
-          labels: {
-            usePointStyle: true,
-            boxHeight: 7,
-          }
-        },
-        tooltip: {
-          usePointStyle: true,
-          multiKeyBackground: "#00000000"
-        }
-      }
-    }
-  });
-
-  const dbDataRequest = new Request("/api/v1/power_consumption?from=13.06.2024&to=13.06.2024");
-  fetch(dbDataRequest).then((response) => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json()
-  }).then((dbDataObject) => {
-    let entries = dbDataObject["data"];
-    let timestamps = [];
-    let power_used = [];
-    let pv_power = [];
-    entries.forEach(element => {
-      timestamps.push(new Date(element["timestamp"]).toLocaleString("DE"));
-      power_used.push(element["power"]);
-      pv_power.push(element["voltage"]); // TODO Remove and replace with other request
-    });
-    chart.data.labels = timestamps;
-    chart.data.datasets[0].data = power_used;
-    chart.data.datasets[1].data = pv_power;
-    chart.update();
-  });
-
-
-
-
-
-
-
-
-  // System chart
-  const system_ctx = document.getElementById('system_chart');
-  let system_chart = new Chart(system_ctx, {
-    type: 'line',
-    data: {
-      labels: [],
-      datasets: [{
-        label: 'Memory usage (%)',
-        data: [],
-        borderWidth: 3,
-        borderColor: "#559598",
-        backgroundColor: "#55959840",
-        fill: true,
-      }, {
-        label: 'CPU temp (°C)',
-        data: [],
-        borderWidth: 3,
-        borderColor: "#cc1d46",
-        backgroundColor: "#cc1d4640",
-        fill: true,
-      }, {
-        label: 'Disk usage (%)',
-        data: [],
-        borderWidth: 3,
-        borderColor: "#d79921",
-        backgroundColor: "#d7992120",
-        fill: true,
-      }],
-    },
-    options: {
-      interaction: {
-        intersect: false,
-        mode: 'index',
-      },
-      scales: {
-        y: {
-          min: 0,
-          max: 100,
-        },
-        x: {
-          ticks: {
-            maxTicksLimit: 2
-          }
-        }
-      },
-      animation: {
-        duration: 0
-      },
-      maintainAspectRatio: false,
-      cubicInterpolationMode: 'monotone',
-      tension: 0.5,
-      pointRadius: 0,
-      pointHitRadius: 20,
-      plugins: {
-        legend: {
-          labels: {
-            usePointStyle: true,
-            boxHeight: 7,
-          }
-        },
-        tooltip: {
-          usePointStyle: true,
-          multiKeyBackground: "#00000000"
-        }
-      }
-    }
-  });
-
-  const systemDataRequest = new Request("/api/v1/system?from=13.06.2024&to=13.06.2024");
-  fetch(systemDataRequest).then((response) => {
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-    return response.json()
-  }).then((dbDataObject) => {
-    let entries = dbDataObject["data"];
-    let timestamps = [];
-    let memory_usage = [];
-    let cpu_temperature = [];
-    let used_disk_percent = [];
-    entries.forEach(element => {
-      timestamps.push(new Date(element["timestamp"]).toLocaleString("DE"));
-      memory_usage.push(element["used_memory_percent"]);
-      cpu_temperature.push(element["cpu_temperature"]);
-      used_disk_percent.push(element["used_disk_percent"]);
-    });
-    system_chart.data.labels = timestamps;
-    system_chart.data.datasets[0].data = memory_usage;
-    system_chart.data.datasets[1].data = cpu_temperature;
-    system_chart.data.datasets[2].data = used_disk_percent;
-    system_chart.update();
-  });
-</script>
+<script src="/static/js/home.js"></script>
 {% endblock %}
