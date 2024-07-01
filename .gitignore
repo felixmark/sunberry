@@ -16,5 +16,6 @@ Cargo.lock
 # Other
 secrets/
 projects/webserver/webserver
+projects/collector/collector
 *.db
 .env

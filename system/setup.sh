@@ -11,6 +11,7 @@ sudo chgrp sunshine /var/log/sunberry
 
 # Other stuff
 sudo cp motd /etc/motd
+sudo cp services/* /etc/systemd/system/
 
 # Symbolic links
-ln -s ~/sunberry /etc/sunberry ~/sunberry
+ln -sf ~/sunberry /etc/sunberry ~/sunberry
