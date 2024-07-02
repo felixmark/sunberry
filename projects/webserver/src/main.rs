@@ -41,7 +41,7 @@ async fn main() {
         .fallback(pages::other::fallback)
         // Pass state into calls
         .with_state(shared_state);
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:8080")
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:80")
         .await
         .unwrap();
     info!("Listening on {}", listener.local_addr().unwrap());
