@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
   const ctx = document.getElementById('power_chart');
-  let chart = new Chart(ctx, {
+  let power_chart = new Chart(ctx, {
     type: 'line',
     data: {
       labels: [],
@@ -151,15 +151,15 @@ document.addEventListener('DOMContentLoaded', function() {
     return response.json()
   }).then((dbDataObject) => {
     let entries = dbDataObject["data"];
-    chart.data.labels = [];
-    system_chart.data.datasets[0].data = [];
-    system_chart.data.datasets[1].data = [];
+    power_chart.data.labels = [];
+    power_chart.data.datasets[0].data = [];
+    power_chart.data.datasets[1].data = [];
     entries.forEach(element => {
-      chart.data.labels.push(new Date(element["timestamp"]).toLocaleString("DE"));
-      system_chart.data.datasets[0].data.push(element["power"]);        // Power used
-      system_chart.data.datasets[1].data.push(element["voltage"]);      // PV power (to be replaced)
+      power_chart.data.labels.push(new Date(element["timestamp"]).toLocaleString("DE"));
+      power_chart.data.datasets[0].data.push(element["power"]);        // Power used
+      power_chart.data.datasets[1].data.push(element["voltage"]);      // PV power (to be replaced)
     });
-    chart.update();
+    power_chart.update();
   });
 
 
@@ -175,12 +175,12 @@ document.addEventListener('DOMContentLoaded', function() {
     return response.json()
   }).then((dbDataObject) => {
     let entries = dbDataObject["data"];
-    chart.data.labels = [];
+    system_chart.data.labels = [];
     system_chart.data.datasets[0].data = [];
     system_chart.data.datasets[1].data = [];
     system_chart.data.datasets[2].data = [];
     entries.forEach(element => {
-      chart.data.labels.push(new Date(element["timestamp"]).toLocaleString("DE"));
+      system_chart.data.labels.push(new Date(element["timestamp"]).toLocaleString("DE"));
       system_chart.data.datasets[0].data.push(element["used_memory_percent"]);
       system_chart.data.datasets[1].data.push(element["cpu_temperature"]);
       system_chart.data.datasets[2].data.push(element["used_disk_percent"]);
