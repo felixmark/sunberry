@@ -22,17 +22,17 @@
     <div id="title" class="white content">
       <img src="/static/img/physalis.png" height="30" style="position: absolute; top: 5px;">
 
-      <div id="menu" class="white">
+      <div id="menu">
         <a href="/">
-          {% if page == "home" %}<span class="white"><i class="fa-solid fa-house"></i> Home</span>
+          {% if page == "home" %}<span class="active-page"><i class="fa-solid fa-house"></i> Home</span>
           {% else %}<span class="black"><i class="fa-solid fa-house"></i> Home</span>{% endif %}
         </a>
         <a href="/systeminfo">
-          {% if page == "systeminfo" %}<span class="white"><i class="fa-solid fa-server"></i> System info</span>
+          {% if page == "systeminfo" %}<span class="active-page"><i class="fa-solid fa-server"></i> System info</span>
           {% else %}<span class="black"><i class="fa-solid fa-server"></i>  System info</span>{% endif %}
         </a>
         <a href="/book">
-          {% if page == "book" %}<span class="white"><i class="fa-solid fa-book"></i> Book</span>
+          {% if page == "book" %}<span class="active-page"><i class="fa-solid fa-book"></i> Book</span>
           {% else %}<span class="black"><i class="fa-solid fa-book"></i> Book</a></span>{% endif %}
         </a>
       </div>

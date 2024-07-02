@@ -19,9 +19,14 @@ a {
 
 #title-wrapper {
     top: 0;
+    position: fixed;
+    z-index: 1;
+    box-shadow: 0 0 10px #202020ff;
+    height: 40px;
+    max-height: 40px;
 }
 #title {
-    padding: 10px 20px;
+    padding: 12px 20px;
     font-size: 14px;
 }
 #title div {
@@ -35,11 +40,15 @@ a {
     font-size: 14px;
 }
 #menu {
-    margin-left: 40px;
+    float: right;
 }
 .wrapper {
     width: 100%;
     text-align: center;
+}
+#content-wrapper {
+    display: block;
+    margin-top: 40px;
 }
 .content {
     display: inline-block;
@@ -47,16 +56,16 @@ a {
     width: 100%;
     max-width: 900px;
 }
-#content-wrapper {
-    overflow-y: auto;
-    max-height: 90vh;
-    max-height: calc(100vh - 40px);
-}
 .padding-20-20 {
     padding: 20px 20px;
 }
 #main-content {
     padding-bottom: 80px;
+}
+
+.active-page {
+    color: #f0f0f0;
+    text-shadow: 0 0 2px #f0f0f0;
 }
 
 .white { color: #f0f0f0; }
