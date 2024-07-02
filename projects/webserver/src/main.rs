@@ -1,4 +1,4 @@
-use std::{path::PathBuf, sync::{Arc, Mutex}};
+use std::{env, path::PathBuf, string, sync::{Arc, Mutex}};
 use axum::{
     routing::get,
     Router,
@@ -21,6 +21,11 @@ struct AppState {
 async fn main() {
     log::set_logger(Box::leak(Box::new(EZLogger::new("/var/log/sunberry/webserver.log")))).expect(ERROR_INITIALIZE);
     log::set_max_level(LevelFilter::Info);
+    let args: Vec<String> = env::args().collect();
+    let mut port = 80;
+    if args.len() > 1 && args[1] == "d" {
+        port = 8080;
+    }
     info!("{}", shared::predef::separator());
     info!("Webserver started");
 
@@ -41,10 +46,12 @@ async fn main() {
         .fallback(pages::other::fallback)
         // Pass state into calls
         .with_state(shared_state);
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:80")
+
+    let address = "0.0.0.0:".to_owned() + &format!("{}", port);
+    let listener = tokio::net::TcpListener::bind(&address)
         .await
         .unwrap();
-    info!("Listening on {}", listener.local_addr().unwrap());
+    info!("Listening on {}", &address);
     axum::serve(listener, app)
         .await
         .unwrap();
