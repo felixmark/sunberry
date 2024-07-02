@@ -1,4 +1,5 @@
-const ctx = document.getElementById('power_chart');
+document.addEventListener('DOMContentLoaded', function() {
+  const ctx = document.getElementById('power_chart');
   let chart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -142,7 +143,6 @@ const ctx = document.getElementById('power_chart');
 
 
 
-
   const dbDataRequest = new Request("/api/v1/power_consumption?from=13.06.2024&to=13.06.2024");
   fetch(dbDataRequest).then((response) => {
     if (!response.ok) {
@@ -187,3 +187,4 @@ const ctx = document.getElementById('power_chart');
     });
     system_chart.update();
   });
+}, false);
