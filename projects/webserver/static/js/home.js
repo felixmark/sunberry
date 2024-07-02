@@ -1,3 +1,5 @@
+// import {de} from './chartjs-adapter-date-fns.bundle.min.js/locale';
+
 document.addEventListener('DOMContentLoaded', function() {
   const ctx = document.getElementById('power_chart');
   let power_chart = new Chart(ctx, {
@@ -27,11 +29,21 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       scales: {
         y: {
-          max: 22,
+          max: 12,
         },
         x: {
           ticks: {
-            maxTicksLimit: 2
+            maxTicksLimit: 2,
+            callback: function(value) { 
+              return new Date(value).toLocaleDateString('de');
+            },
+          },
+          type: 'time',
+          time: {
+            unit: 'minute',
+            displayFormats: {
+              day: 'yy.MM.dd hh:mm'
+            }
           }
         }
       },
@@ -106,7 +118,16 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         x: {
           ticks: {
-            maxTicksLimit: 2
+            maxTicksLimit: 2,
+            callback: function(value) { 
+              return new Date(value).toLocaleDateString('de');
+            },
+          },
+          type: 'time',
+          time: {
+            displayFormats: {
+              year: 'YYYY'
+            }
           }
         }
       },
@@ -155,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
     power_chart.data.datasets[0].data = [];
     power_chart.data.datasets[1].data = [];
     entries.forEach(element => {
-      power_chart.data.labels.push(new Date(element["timestamp"]).toLocaleString("DE"));
+      power_chart.data.labels.push(new Date(element["timestamp"]));
       power_chart.data.datasets[0].data.push(element["power"]);        // Power used
       power_chart.data.datasets[1].data.push(element["voltage"]);      // PV power (to be replaced)
     });
@@ -180,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
     system_chart.data.datasets[1].data = [];
     system_chart.data.datasets[2].data = [];
     entries.forEach(element => {
-      system_chart.data.labels.push(new Date(element["timestamp"]).toLocaleString("DE"));
+      system_chart.data.labels.push(new Date(element["timestamp"]));
       system_chart.data.datasets[0].data.push(element["used_memory_percent"]);
       system_chart.data.datasets[1].data.push(element["cpu_temperature"]);
       system_chart.data.datasets[2].data.push(element["used_disk_percent"]);

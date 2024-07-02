@@ -50,7 +50,7 @@ a {
 #content-wrapper {
     overflow-y: auto;
     max-height: 90vh;
-    max-height: calc(100vh - 44px);
+    max-height: calc(100vh - 40px);
 }
 .padding-20-20 {
     padding: 20px 20px;
