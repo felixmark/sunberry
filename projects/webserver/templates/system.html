@@ -1,9 +1,23 @@
 {% extends "base.html" %}
 
-{% block title %}System info{% endblock %}
+{% block title %}System{% endblock %}
 
 {% block content %}
-<h1>System info</h1>
+<h1>System</h1>
+
+<h2>7 day power chart</h2>
+<p>Currently faked</p>
+<div class="chart-container" style="position: relative; height:40vh; width: 100%;">
+  <canvas id="power_chart"></canvas>
+</div>
+
+<h2>7 day system chart</h2>
+<div class="chart-container" style="position: relative; height:40vh; width: 100%;">
+  <canvas id="system_chart"></canvas>
+</div>
+
+
+<h1>Info</h1>
 
 <h2>General</h2>
 <table>
@@ -51,4 +65,9 @@
     <tr><td>{{ process.name|e }}</td><td>{{ process.memory|e }}</td><td>{{ process.cpu_usage|e }} %</td></tr>
     {% endfor %}
 </table>
+
+
+<script src="/static/js/chart.js"></script>
+<script src="/static/js/chartjs-adapter-date-fns.bundle.min.js"></script>
+<script src="/static/js/systemcharts.js" type="module"></script>
 {% endblock %}
