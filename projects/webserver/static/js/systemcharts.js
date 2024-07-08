@@ -4,6 +4,9 @@ const timezoneOffset = new Date().getTimezoneOffset();
 let from = new Date();
 from.setDate(from.getDate() - 5);
 from.setHours(0);
+from.setMinutes(0);
+from.setSeconds(0);
+from.setMilliseconds(0);
 let to = new Date();
 
 Date.prototype.correctUTC = function(timezoneOffset) {
