@@ -9,6 +9,14 @@ use axum::{
 use shared::dbstructs::{self, INAMeasurement, SystemMeasurement};
 use crate::AppState;
 
+
+#[derive(Deserialize)]
+pub struct CheckParams {
+    from: Option<i64>,
+    to: Option<i64>
+}
+
+
 #[derive(Serialize)]
 pub struct JsonResponse<T> {
     data: T,
@@ -46,24 +54,28 @@ async fn get_ina_db_entries(State(state): State<Arc<AppState>>, table_name: &str
     }))
 }
 
-pub async fn get_power_consumption(State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<INAMeasurement>>>, (StatusCode, &'static str)> {
+pub async fn get_power_consumption(Query(params): Query<CheckParams>, State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<INAMeasurement>>>, (StatusCode, &'static str)> {
     // TODO Get from and to from request parameters
-    let from = Utc::now() - Duration::days(7);
-    let to = Utc::now();
+    
+    // Parse from and to parameters (timestamps in millis)
+    let from_millis = params.from.unwrap_or_else(|| Utc::now().timestamp_millis());
+    let to_millis = params.to.unwrap_or_else(|| (Utc::now() - Duration::days(7)).timestamp_millis());
+    let from = DateTime::from_timestamp_millis(from_millis).expect("Parsing 'from' millis failed.");
+    let to = DateTime::from_timestamp_millis(to_millis).expect("Parsing 'to' millis failed.");
+    
     get_ina_db_entries(State(state), "power_consumptions", from, to).await
 }
 
-pub async fn get_power_pv(State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<INAMeasurement>>>, (StatusCode, &'static str)> {
+pub async fn get_power_pv(Query(params): Query<CheckParams>, State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<INAMeasurement>>>, (StatusCode, &'static str)> {
     // TODO Implement pv_power table and such
-    let from = Utc::now() - Duration::days(7);
-    let to = Utc::now();
+    
+    // Parse from and to parameters (timestamps in millis)
+    let from_millis = params.from.unwrap_or_else(|| Utc::now().timestamp_millis());
+    let to_millis = params.to.unwrap_or_else(|| (Utc::now() - Duration::days(7)).timestamp_millis());
+    let from = DateTime::from_timestamp_millis(from_millis).expect("Parsing 'from' millis failed.");
+    let to = DateTime::from_timestamp_millis(to_millis).expect("Parsing 'to' millis failed.");
+    
     get_ina_db_entries(State(state), "pv_powers", from, to).await
-}
-
-#[derive(Deserialize)]
-pub struct CheckParams {
-    from: Option<i64>,
-    to: Option<i64>
 }
 
 pub async fn get_system_info_data(Query(params): Query<CheckParams>, State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<SystemMeasurement>>>, (StatusCode, &'static str)> {
