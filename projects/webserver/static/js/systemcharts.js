@@ -188,6 +188,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   updatePowerChart();
   updateSystemChart();
-  const updatePowerChartInterval = setInterval(updatePowerChart, 5000);
-  const updateSystemChartInterval = setInterval(updateSystemChart, 5000);
+  const updatePowerChartInterval = setInterval(updatePowerChart, 300000);
+  const updateSystemChartInterval = setInterval(updateSystemChart, 300000);
 }, false);
