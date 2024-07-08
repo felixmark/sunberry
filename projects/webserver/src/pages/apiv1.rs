@@ -1,10 +1,10 @@
 
 
 use std::sync::Arc;
-use serde::Serialize;
-use chrono::{DateTime, Duration, Utc};
+use serde::{Deserialize, Serialize};
+use chrono::{DateTime, Datelike, Duration, FixedOffset, NaiveDate, NaiveDateTime, NaiveTime, OutOfRange, OutOfRangeError, TimeZone, Utc};
 use axum::{
-    extract::State, http::StatusCode, routing::get, Json, Router
+    extract::{Query, State}, http::StatusCode, routing::get, Json, Router
 };
 use shared::dbstructs::{self, INAMeasurement, SystemMeasurement};
 use crate::AppState;
@@ -60,11 +60,21 @@ pub async fn get_power_pv(State(state): State<Arc<AppState>>) -> Result<Json<Jso
     get_ina_db_entries(State(state), "pv_powers", from, to).await
 }
 
-pub async fn get_system_info_data(State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<SystemMeasurement>>>, (StatusCode, &'static str)> {
-    let db_connection = state.db_connection.lock().unwrap();
-    let from = Utc::now() - Duration::days(7);
-    let to = Utc::now();
+#[derive(Deserialize)]
+pub struct CheckParams {
+    from: Option<i64>,
+    to: Option<i64>
+}
 
+pub async fn get_system_info_data(Query(params): Query<CheckParams>, State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<SystemMeasurement>>>, (StatusCode, &'static str)> {
+    let db_connection = state.db_connection.lock().unwrap();
+
+    // Parse from and to parameters (timestamps in millis)
+    let from_millis = params.from.unwrap_or_else(|| Utc::now().timestamp_millis());
+    let to_millis = params.to.unwrap_or_else(|| (Utc::now() - Duration::days(7)).timestamp_millis());
+    let from = DateTime::from_timestamp_millis(from_millis).expect("Parsing 'from' millis failed.");
+    let to = DateTime::from_timestamp_millis(to_millis).expect("Parsing 'to' millis failed.");
+    
     let string_statement = format!("SELECT 
         id,
         min(timestamp),

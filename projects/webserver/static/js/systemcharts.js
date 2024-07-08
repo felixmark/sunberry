@@ -1,6 +1,11 @@
 // import {de} from './chartjs-adapter-date-fns.bundle.min.js/locale';
 
 const timezoneOffset = new Date().getTimezoneOffset();
+let from = new Date();
+from.setDate(from.getDate() - 5);
+from.setHours(0);
+from.setHours(-1 * from.getTimezoneOffset() / 60);
+let to = new Date();
 
 Date.prototype.correctUTC = function(timezoneOffset) {
   this.setTime(this.getTime() - (timezoneOffset*60*1000));
@@ -136,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   function updatePowerChart() {
-    const dbDataRequest = new Request("/api/v1/power_consumption?from=13.06.2024&to=13.06.2024");
+    const dbDataRequest = new Request("/api/v1/power_consumption?from="+String(Number(from))+"&to="+String(Number(to)));
     fetch(dbDataRequest).then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -160,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   function updateSystemChart() {
-    const systemDataRequest = new Request("/api/v1/system?from=13.06.2024&to=13.06.2024");
+    const systemDataRequest = new Request("/api/v1/system?from="+String(Number(from))+"&to="+String(Number(to)));
     fetch(systemDataRequest).then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
