@@ -62,7 +62,7 @@ pub async fn get_power_pv(State(state): State<Arc<AppState>>) -> Result<Json<Jso
 
 pub async fn get_system_info_data(State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<SystemMeasurement>>>, (StatusCode, &'static str)> {
     let db_connection = state.db_connection.lock().unwrap();
-    let from = Utc::now() - Duration::days(1);
+    let from = Utc::now() - Duration::days(7);
     let to = Utc::now();
 
     let string_statement = format!("SELECT 
