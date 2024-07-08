@@ -13,7 +13,7 @@ mod tables;
 mod measure;
 mod db_insert;
 
-static LOOP_INTERVAL_SECONDS: Duration = Duration::from_secs(5);
+static LOOP_INTERVAL_SECONDS: Duration = Duration::from_secs(60);
 
 
 fn collect(conn: &Connection) -> Result<()> {
