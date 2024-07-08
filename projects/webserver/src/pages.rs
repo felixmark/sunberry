@@ -1,5 +1,5 @@
 pub mod home;
 pub mod mdpage;
-pub mod systeminfo;
+pub mod system;
 pub mod apiv1;
 pub mod other;

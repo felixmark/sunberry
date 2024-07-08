@@ -48,14 +48,14 @@ async fn get_ina_db_entries(State(state): State<Arc<AppState>>, table_name: &str
 
 pub async fn get_power_consumption(State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<INAMeasurement>>>, (StatusCode, &'static str)> {
     // TODO Get from and to from request parameters
-    let from = Utc::now() - Duration::days(1);
+    let from = Utc::now() - Duration::days(7);
     let to = Utc::now();
     get_ina_db_entries(State(state), "power_consumptions", from, to).await
 }
 
 pub async fn get_power_pv(State(state): State<Arc<AppState>>) -> Result<Json<JsonResponse<Vec<INAMeasurement>>>, (StatusCode, &'static str)> {
     // TODO Implement pv_power table and such
-    let from = Utc::now() - Duration::days(1);
+    let from = Utc::now() - Duration::days(7);
     let to = Utc::now();
     get_ina_db_entries(State(state), "pv_powers", from, to).await
 }

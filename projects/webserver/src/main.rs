@@ -36,7 +36,7 @@ async fn main() {
     let serve_dir = ServeDir::new("static").not_found_service(ServeFile::new("static"));
     let app = Router::new()
         .route("/", get(pages::home::page_home))
-        .route("/systeminfo", get(pages::systeminfo::page_systeminfo))
+        .route("/system", get(pages::system::page_system))
         .route("/book", get(pages::mdpage::page_book))
         // API v1
         .nest("/api/v1", pages::apiv1::router())
