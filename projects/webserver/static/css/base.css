@@ -1,13 +1,27 @@
+@font-face {
+    font-family: OpenSans;
+    src: url(/static/fonts/opensans_regular/OpenSans-Regular-webfont.ttf);
+}
+
 * {
     box-sizing: border-box; 
 }
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
 html, body {
-    background: #3c3836;
-    color: #f0f0f0;
+    background: #fff;
+    color: #404040;
     margin: 0;
     padding: 0;
-    font-family: system-ui;
+    font-family: OpenSans;
     font-size: 15px;
+}
+img {
+    max-width: 100%;
 }
 th, td {
     padding: 2px 0;
@@ -19,42 +33,47 @@ a {
 
 #title-wrapper {
     top: 0;
+    left: 0;
     position: fixed;
     z-index: 1;
-    box-shadow: 0 0 10px #202020ff;
-    height: 40px;
-    max-height: 40px;
+    box-shadow: 0 0 10px #000000ff;
+    height: 100vh;
+    max-height: 100vh;
+    width: 15vw;
+    max-width: 300px;
+    min-width: 170px;
+    padding: 20px;
 }
-#title {
-    padding: 12px 20px;
-    font-size: 14px;
-}
-#title div {
-    display: inline-block;
-}
-#title a {
-    margin-left: 20px;
-    font-weight: normal;
-}
-#title a i {
-    font-size: 14px;
-}
-#menu {
-    float: right;
-}
-.wrapper {
+#pagelogo {
     width: 100%;
+    text-align: center;
+    margin: 20px 0 40px 0;
+}
+#title #pagelogo img {
+    width: 10vw;
+    height: 10vw;
+    max-width: 100px;
+    max-height: 100px;
+}
+#menu a {
+    display: block;
+    margin: 10px 0;
+}
+
+.wrapper {
+    width: calc(100% - min(340px, max(170px, 15vw)));
+    max-width: calc(100% - min(340px, max(170px, 15vw)));
     text-align: center;
 }
 #content-wrapper {
     display: block;
-    margin-top: 40px;
+    margin-left: min(300px, max(170px, 15vw));
 }
 .content {
     display: inline-block;
     text-align: left;
     width: 100%;
-    max-width: 900px;
+    max-width: min(100%, 900px);
 }
 .padding-20-20 {
     padding: 20px 20px;
@@ -62,22 +81,34 @@ a {
 #main-content {
     padding-bottom: 80px;
 }
-
 .active-page {
-    color: #f0f0f0;
-    text-shadow: 0 0 2px #f0f0f0;
+    color: #83a540;
+}
+.photo-collection {
+    width: 100%;
+}
+.photo-collection img {
+    max-width: 320px;
+    max-height: 180px;
+    margin: 10px;
+    padding: 10px;
+    box-shadow: 0 0 10px #202040;
+    cursor: pointer;
 }
 
 .white { color: #f0f0f0; }
-.green { color: #8ec07c; }
+.lightgray { color: #c0c0c0; }
+.darkgray { color: #404040; }
+.green { color: #869c4d; }
 .blue, a { color: #559598; }
 .yellow { color: #d79921; }
 .red { color: #cc1d46; }
 .black { color: #3c3836; }
 .bg-white { color: #f0f0f0; }
-.bg-green { background: #8ec07c; }
+.bg-green { background: #869c4d; }
 .bg-blue { background: #559598; }
 .bg-yellow { background: #d79921; }
 .bg-red { background: #cc1d46; }
+.bg-gray { background: #3e4247; }
 .bg-black { background: #3c3836; }
 .bg-blacker { background: #282625; }

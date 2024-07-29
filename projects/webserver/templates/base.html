@@ -18,22 +18,43 @@
   <link href="/static/fontawesome/css/solid.css" rel="stylesheet" />
 </head>
 <body>
-  <div id="title-wrapper" class="bg-yellow wrapper">
+  <div id="title-wrapper" class="bg-gray wrapper">
     <div id="title" class="white content">
-      <img src="/static/img/physalis.png" height="30" style="position: absolute; top: 5px;">
+      <div id="pagelogo">
+        <img src="/static/img/gaia.png">
+      </div>
 
       <div id="menu">
         <a href="/">
           {% if page == "home" %}<span class="active-page"><i class="fa-solid fa-house"></i> Home</span>
-          {% else %}<span class="black"><i class="fa-solid fa-house"></i> Home</span>{% endif %}
+          {% else %}<span class="lightgray"><i class="fa-solid fa-house"></i> Home</span>{% endif %}
         </a>
+        <hr>
+        <a href="/fauna">
+          {% if page == "fauna" %}<span class="active-page"><i class="fa-solid fa-paw"></i> Fauna</span>
+          {% else %}<span class="lightgray"><i class="fa-solid fa-paw"></i> Fauna</a></span>{% endif %}
+        </a>
+        <a href="/flora">
+          {% if page == "flora" %}<span class="active-page"><i class="fa-solid fa-tree"></i> Flora</span>
+          {% else %}<span class="lightgray"><i class="fa-solid fa-tree"></i> Flora</a></span>{% endif %}
+        </a>
+        <a href="/funga">
+          {% if page == "funga" %}<span class="active-page"><i class="fa-solid fa-seedling"></i> Funga</span>
+          {% else %}<span class="lightgray"><i class="fa-solid fa-seedling"></i> Funga</a></span>{% endif %}
+        </a>
+        <a href="/gestein">
+          {% if page == "gestein" %}<span class="active-page"><i class="fa-solid fa-mountain"></i> Gestein</span>
+          {% else %}<span class="lightgray"><i class="fa-solid fa-mountain"></i> Gestein</a></span>{% endif %}
+        </a>
+        <hr>
+        <a href="/wandersteine">
+          {% if page == "wandersteine" %}<span class="active-page"><i class="fa-solid fa-person-hiking"></i> Wandersteine</span>
+          {% else %}<span class="lightgray"><i class="fa-solid fa-person-hiking"></i> Wandersteine</a></span>{% endif %}
+        </a>
+        <hr>
         <a href="/system">
           {% if page == "system" %}<span class="active-page"><i class="fa-solid fa-server"></i> System</span>
-          {% else %}<span class="black"><i class="fa-solid fa-server"></i>  System</span>{% endif %}
-        </a>
-        <a href="/book">
-          {% if page == "book" %}<span class="active-page"><i class="fa-solid fa-book"></i> Book</span>
-          {% else %}<span class="black"><i class="fa-solid fa-book"></i> Book</a></span>{% endif %}
+          {% else %}<span class="lightgray"><i class="fa-solid fa-server"></i>  System</span>{% endif %}
         </a>
       </div>
     </div>

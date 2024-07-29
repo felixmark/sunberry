@@ -4,15 +4,17 @@
     margin: 60px 0 120px 0;
 }
 .project-pictures td {
-    padding: 1vw 0;
+    padding-right: 20px;
 }
 .project-pictures .image {
-    width: 250px;
-    height: 250px;
-    max-width: 12vw;
-    max-height: 12vw;
-    background: #00000020;
+    width: 120px;
+    height: 120px;
+    max-width: 10vw;
+    max-height: 10vw;
+    background: #000000d0;
+    border: 3px solid #a0a0a0;
     border-radius: 50%;
+    padding: max(10px, min(20px, 2vw));
 
     display: inline-flex;
     justify-content: center;
@@ -21,9 +23,4 @@
 .project-pictures .image img {
     max-width: 100%;
     max-height: 100%;
-    border-radius: 50%;
-}
-.project-pictures .text {
-    margin-top: 20px;
-    font-size: min(2vw, 20px);
 }

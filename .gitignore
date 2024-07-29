@@ -17,5 +17,6 @@ Cargo.lock
 secrets/
 projects/webserver/webserver
 projects/collector/collector
+projects/webserver/static/img/naturarchiv
 *.db
 .env

@@ -36,8 +36,13 @@ async fn main() {
     let serve_dir = ServeDir::new("static").not_found_service(ServeFile::new("static"));
     let app = Router::new()
         .route("/", get(pages::home::page_home))
+        .route("/fauna", get(pages::mdpage::page_fauna))
+        .route("/flora", get(pages::mdpage::page_flora))
+        .route("/funga", get(pages::mdpage::page_funga))
+        .route("/gestein", get(pages::mdpage::page_gestein))
+        .route("/wandersteine", get(pages::mdpage::page_wandersteine))
+        .route("/mein-wanderstein", get(pages::mdpage::page_mein_wanderstein))
         .route("/system", get(pages::system::page_system))
-        .route("/book", get(pages::mdpage::page_book))
         // API v1
         .nest("/api/v1", pages::apiv1::router())
         // Static files

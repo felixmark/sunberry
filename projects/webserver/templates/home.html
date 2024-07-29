@@ -4,33 +4,38 @@
 
 {% block content %}
 <link rel="stylesheet" href="/static/css/home.css">
-<h1>Welcome to Sunberry!</h1>
+<div style="text-align: center;">
+  <h1>Sunberry Naturarchiv</h1>
+  <p>Natur sehen, erleben und verstehen.</p>
+</div>
 
 <table class="project-pictures">
   <tr>
     <td>
-      <div class="image"><img src="/static/img/solar-panel.png"></div>
+      <a href="/fauna">
+        <div class="image"><img src="/static/img/naturarchiv/fauna.jpg"></div>
+        <div class="text">Fauna</div>
+      </a>
     </td>
     <td>
-      <div class="image"><img src="/static/img/energy_efficient.png"></div>      
+      <a href="/flora">
+        <div class="image"><img src="/static/img/naturarchiv/flora.jpg"></div>
+        <div class="text">Flora</div>
+      </a>
     </td>
     <td>
-      <div class="image"><img src="/static/img/cuddlyferris.svg"></div>      
+      <a href="/funga">
+        <div class="image"><img src="/static/img/naturarchiv/funga.jpg"></div>
+        <div class="text">Funga</div>
+      </a>
     </td>
     <td>
-      <div class="image"><img src="/static/img/educational.png"></div>      
+      <a href="/gestein">
+        <div class="image"><img src="/static/img/naturarchiv/gestein.jpg"></div>
+        <div class="text">Gestein</div>
+      </a>
     </td>
-  </tr>
-  <tr>
-    <td>100% Solar powered</td>
-    <td>100% Energy efficient</td>
-    <td>100% Rust</td>
-    <td>100% Educational</td>
   </tr>
 </table>
 
-<p>
-  GitHub repository:
-  <a href="https://github.com/felixmark/sunberry">https://github.com/felixmark/sunberry</a>
-</p>
 {% endblock %}
