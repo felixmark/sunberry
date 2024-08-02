@@ -41,11 +41,15 @@ a {
     max-height: 100vh;
     width: 15vw;
     max-width: 300px;
-    min-width: 170px;
+    min-width: 200px;
     padding: 20px;
 }
 #topbar {
     display: none;
+}
+.inset {
+    width: 15px;
+    display: inline-block;
 }
 
 #pagelogo {
@@ -63,13 +67,13 @@ a {
 }
 
 .wrapper {
-    width: calc(100% - min(340px, max(170px, 15vw)));
-    max-width: calc(100% - min(340px, max(170px, 15vw)));
+    width: calc(100% - min(340px, max(200px, 15vw)));
+    max-width: calc(100% - min(340px, max(200px, 15vw)));
     text-align: center;
 }
 #content-wrapper {
     display: block;
-    margin-left: min(300px, max(170px, 15vw));
+    margin-left: min(300px, max(200px, 15vw));
 }
 .content {
     display: inline-block;
