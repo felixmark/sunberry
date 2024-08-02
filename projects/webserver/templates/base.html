@@ -7,23 +7,27 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/favicon-16x16.png">
   <link rel="manifest" href="/static/site.webmanifest">
-  <title>Sunberry - {% block title %}Base{% endblock %}</title>
+  <title>Ökologium - {% block title %}Base{% endblock %}</title>
   <link rel="stylesheet" href="/static/css/base.css">
 
   <link rel="stylesheet" href="/static/js/highlight.js/style.css">
   <script src="/static/js/highlight.js/highlight.min.js"></script>
   <script>hljs.highlightAll();</script>
 
+  <script src="/static/js/base.js"></script>
+
   <link href="/static/fontawesome/css/fontawesome.css" rel="stylesheet" />
   <link href="/static/fontawesome/css/solid.css" rel="stylesheet" />
 </head>
 <body>
-  <div id="title-wrapper" class="bg-gray wrapper">
-    <div id="title" class="white content">
+
+  <div id="topbar"><span>Ökologium</span><div id="bars"><i class="fa-solid fa-bars"></i></div></div>
+
+  <div id="menu-wrapper-wrapper" class="bg-gray wrapper">
+    <div id="menu-wrapper" class="white content">
       <div id="pagelogo">
         <img src="/static/img/gaia.png">
       </div>
-
       <div id="menu">
         <a href="/">
           {% if page == "home" %}<span class="active-page"><i class="fa-solid fa-house"></i> Home</span>
@@ -59,10 +63,12 @@
       </div>
     </div>
   </div>
+
   <div id="content-wrapper" class="wrapper">
     <div id="main-content" class="content padding-20-20">
       {% block content %}<p>Child node is mounted here.</p>{% endblock %}
     </div>
   </div>
+  
 </body>
 </html>

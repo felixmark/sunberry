@@ -1,16 +1,16 @@
 .project-pictures {
     text-align: center;
     width: 100%;
-    margin: 60px 0 120px 0;
+    margin: 40px 0 40px 0;
 }
 .project-pictures td {
     padding: 1vw 0;
 }
 .project-pictures .image {
-    width: 250px;
-    height: 250px;
-    max-width: 12vw;
-    max-height: 12vw;
+    width: 220px;
+    height: 220px;
+    max-width: 18vw;
+    max-height: 18vw;
     background: #00000020;
     border-radius: 50%;
 
@@ -25,5 +25,5 @@
 }
 .project-pictures .text {
     margin-top: 20px;
-    font-size: min(2vw, 20px);
+    font-size: max(min(2vw, 25px), 12px);
 }

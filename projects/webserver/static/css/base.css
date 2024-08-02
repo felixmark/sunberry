@@ -31,7 +31,7 @@ a {
     text-decoration: none;
 }
 
-#title-wrapper {
+#menu-wrapper-wrapper {
     top: 0;
     left: 0;
     position: fixed;
@@ -44,14 +44,16 @@ a {
     min-width: 170px;
     padding: 20px;
 }
+#topbar {
+    display: none;
+}
+
 #pagelogo {
     width: 100%;
     text-align: center;
     margin: 20px 0 40px 0;
 }
-#title #pagelogo img {
-    width: 10vw;
-    height: 10vw;
+#menu-wrapper #pagelogo img {
     max-width: 100px;
     max-height: 100px;
 }
@@ -73,7 +75,7 @@ a {
     display: inline-block;
     text-align: left;
     width: 100%;
-    max-width: min(100%, 900px);
+    max-width: min(100%, 1000px);
 }
 .padding-20-20 {
     padding: 20px 20px;
@@ -82,7 +84,7 @@ a {
     padding-bottom: 80px;
 }
 .active-page {
-    color: #83a540;
+    color: #adc752;
 }
 .photo-collection {
     width: 100%;
@@ -95,6 +97,50 @@ a {
     box-shadow: 0 0 10px #202040;
     cursor: pointer;
 }
+
+
+@media only screen and (max-width: 800px) {
+    #menu-wrapper-wrapper {
+        left: auto;
+        right: -200px;
+        padding-top: 50px;
+        transition: right 0.5s;
+    }
+    #topbar {
+        display: block;
+        top: 0;
+        left: 0;
+        position: fixed;
+        z-index: 2;
+        box-shadow: 0 0 10px #000000ff;
+        width: 100vw;
+        text-align: center;
+        background: #adc752;
+
+        height: 40px;
+        max-height: 40px;
+        padding: 11px;
+        font-size: 18px;
+        line-height: 18px;
+        user-select: none;
+    }
+    #bars {
+        position: fixed;
+        top: 0;
+        right: 0;
+        padding: 11px;
+        cursor: pointer;
+    }
+    #content-wrapper {
+        margin-top: 50px;
+        margin-left: 0;
+    }
+    .wrapper {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
 
 .white { color: #f0f0f0; }
 .lightgray { color: #c0c0c0; }
