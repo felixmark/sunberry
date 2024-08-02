@@ -106,7 +106,7 @@ a {
 @media only screen and (max-width: 800px) {
     #menu-wrapper-wrapper {
         left: auto;
-        right: -200px;
+        right: -210px;
         padding-top: 50px;
         transition: right 0.5s;
     }
